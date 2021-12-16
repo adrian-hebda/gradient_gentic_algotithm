@@ -17,19 +17,6 @@ public class SimpleSelection implements Selection {
     return matingPool;
   }
 
-  // Does not work yet
-  private Chromosome selectChromosomeByRouletteWheelStochasticAcceptance(Population population) {
-    Double bestFitness = population.getFittest().getFitness();
-    while (true) {
-      Chromosome randomChromosome =
-          population
-              .getPopulation()
-              .get(RandomUtils.getRandomIntInRange(0, population.getPopulation().size() / 2));
-      double choiceProbability = randomChromosome.getFitness() / bestFitness;
-      if (RandomUtils.getRandomDoubleInRange(0.0, 1.0) < choiceProbability) return randomChromosome;
-    }
-  }
-
   private Chromosome selectChromosomeByRouletteWheel(Population population) {
     double fitnessSum =
         population.getPopulation().stream().mapToDouble(Chromosome::getFitness).sum();

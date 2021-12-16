@@ -1,7 +1,9 @@
 package pl.edu.agh.genetic.model;
 
 import lombok.Data;
+import pl.edu.agh.genetic.exceptions.FunctionDoesNotImplementGradientInterfaceException;
 import pl.edu.agh.genetic.model.functions.Function;
+import pl.edu.agh.genetic.model.functions.GradientFunction;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,14 +15,15 @@ public class Population {
   private Chromosome fittest;
   private final Function function;
 
-  public Population(int populationSize, List<Constraint> variablesConstraints, Function function) {
+  public Population(int populationSize, Function function) {
     if (populationSize % 2 != 0) {
       throw new RuntimeException("Population size must be even.");
     }
     this.function = function;
     for (int i = 0; i < populationSize; i++) {
       population.add(
-          new Chromosome(variablesConstraints, function.getRequiredNumberOfParameters()));
+          new Chromosome(
+              function.getVariablesConstraints(), function.getRequiredNumberOfParameters()));
     }
     calculateFitness();
   }
@@ -31,5 +34,16 @@ public class Population {
         population.stream()
             .max(Comparator.comparing(Chromosome::getFitness))
             .orElseThrow(RuntimeException::new); // TODO exception
+  }
+
+  // TODO wyciągnąć do Step
+
+  public void moveByGradient(double rate) {
+    if (function instanceof GradientFunction) {
+      population.forEach(
+          chromosome -> chromosome.moveByGradient((GradientFunction) function, rate));
+    } else {
+      throw new FunctionDoesNotImplementGradientInterfaceException();
+    }
   }
 }

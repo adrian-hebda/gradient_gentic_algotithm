@@ -1,9 +1,9 @@
 package pl.edu.agh.genetic.operations.mutations;
 
 import pl.edu.agh.genetic.model.Population;
-import pl.edu.agh.genetic.utils.RandomUtils;
 
 import java.util.BitSet;
+import java.util.Random;
 
 public class SimpleMutation implements Mutation {
 
@@ -14,7 +14,7 @@ public class SimpleMutation implements Mutation {
   }
 
   @Override
-  public void performStep(Population population) {
+  public void performMutation(Population population) {
 
     population.getPopulation().stream()
         .flatMap(chromosome -> chromosome.getCodedChromosome().stream())
@@ -23,7 +23,7 @@ public class SimpleMutation implements Mutation {
 
   private void flipMutationConditionFulfilled(BitSet bitSet) {
     for (int i = 0; i < bitSet.length(); i++) {
-      if (RandomUtils.getRandomDoubleInRange(0.0, 1.0) < fixedMutationRate) {
+      if (Math.random() < fixedMutationRate) {
         bitSet.flip(i);
         if ((bitSet.get(52, 63).cardinality() == 11 && bitSet.get(0, 52).cardinality() == 0)
             || (bitSet.get(52, 63).cardinality() == 11 && bitSet.get(0, 52).cardinality() != 0)) {

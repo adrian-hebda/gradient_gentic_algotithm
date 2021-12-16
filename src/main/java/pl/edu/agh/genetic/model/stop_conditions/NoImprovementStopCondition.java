@@ -12,6 +12,7 @@ public class NoImprovementStopCondition implements StopCondition {
 
   @Override
   public boolean isStopConditionMet(AlgorithmMetadata algorithm) {
-    return algorithm.getNumberOfGenerations() >= maxNumberOfGenerationsWithoutImprovement;
+    return algorithm.getNumberOfGenerationsWithoutImprovement()
+        >= maxNumberOfGenerationsWithoutImprovement;
   }
 }

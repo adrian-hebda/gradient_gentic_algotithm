@@ -1,16 +1,21 @@
 package pl.edu.agh.genetic.operations;
 
 import lombok.Builder;
+import org.apache.commons.lang3.SerializationUtils;
+import pl.edu.agh.genetic.exceptions.FunctionDoesNotImplementGradientInterfaceException;
 import pl.edu.agh.genetic.exceptions.MissingRequiredOperationException;
 import pl.edu.agh.genetic.exceptions.PopulationNotGeneratedException;
 import pl.edu.agh.genetic.model.AlgorithmMetadata;
 import pl.edu.agh.genetic.model.Chromosome;
+import pl.edu.agh.genetic.model.Gradient;
 import pl.edu.agh.genetic.model.Population;
+import pl.edu.agh.genetic.model.functions.Function;
 import pl.edu.agh.genetic.model.stop_conditions.FitnessFunctionIsInfinity;
 import pl.edu.agh.genetic.model.stop_conditions.StopCondition;
 import pl.edu.agh.genetic.operations.crossovers.Crossover;
 import pl.edu.agh.genetic.operations.mutations.Mutation;
 import pl.edu.agh.genetic.operations.selections.Selection;
+import pl.edu.agh.genetic.utils.RandomUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,18 +38,19 @@ public class GeneticAlgorithm {
       Selection selection,
       List<Step> preSteps,
       List<Step> postSteps,
-      Population population,
-      List<StopCondition> stopConditions) {
+      List<StopCondition> stopConditions,
+      Function function,
+      int populationSize) {
     this.crossover = crossover;
     this.mutation = mutation;
     this.selection = selection;
-    this.population = population;
+    this.population = new Population(populationSize, function);
 
     this.stopConditions.addAll(stopConditions);
     this.stopConditions.add(new FitnessFunctionIsInfinity());
 
     this.preSteps = preSteps == null ? Collections.emptyList() : preSteps;
-    this.postSteps = postSteps == null ? Collections.emptyList() : preSteps;
+    this.postSteps = postSteps == null ? Collections.emptyList() : postSteps;
   }
 
   public Chromosome runAlgorithm() {
@@ -52,9 +58,10 @@ public class GeneticAlgorithm {
     population.calculateFitness();
     while (stopConditions.stream()
         .noneMatch(stopCondition -> stopCondition.isStopConditionMet(metadata))) {
-      preSteps.forEach(step -> step.performStep(population));
+      preSteps.forEach(step -> step.performStep(population, this));
       runCoreAlgorithm();
-      postSteps.forEach(step -> step.performStep(population));
+      postSteps.forEach(step -> step.performStep(population, this));
+      population.calculateFitness();
       updateMetadata();
     }
 
@@ -62,11 +69,13 @@ public class GeneticAlgorithm {
   }
 
   private void runCoreAlgorithm() {
+    Chromosome fittest = SerializationUtils.clone(population.getFittest());
     List<Chromosome> matingPool = selection.performSelection(population);
     List<Chromosome> newChromosomes = crossover.performCrossover(matingPool);
+    newChromosomes.set(
+        RandomUtils.getRandomIntInRange(0, population.getPopulation().size()), fittest);
     population.setPopulation(newChromosomes);
-    mutation.performStep(population);
-    population.calculateFitness();
+    mutation.performMutation(population);
   }
 
   private void updateMetadata() {
@@ -89,8 +98,10 @@ public class GeneticAlgorithm {
   }
 
   private void updateNumberOfGenerationWithoutImprovement() {
-    if (population.getFittest().equals(metadata.getBestChromosome())) {
-      metadata.setNumberOfGenerationsWithoutImprovement(metadata.getNumberOfGenerations() + 1);
+    if (metadata.getBestChromosome() == null
+        || metadata.getBestChromosome().getFitness() >= population.getFittest().getFitness()) {
+      metadata.setNumberOfGenerationsWithoutImprovement(
+          metadata.getNumberOfGenerationsWithoutImprovement() + 1);
     } else {
       metadata.setNumberOfGenerationsWithoutImprovement(0);
     }
@@ -101,6 +112,16 @@ public class GeneticAlgorithm {
     validateMutation();
     validateSelection();
     validatePopulation();
+    validateGradient();
+  }
+
+  private void validateGradient() {
+    boolean gradientCrossover = crossover instanceof Gradient;
+    boolean gradientFunction = population.getFunction() instanceof Gradient;
+
+    if (gradientCrossover && !gradientFunction) {
+      throw new FunctionDoesNotImplementGradientInterfaceException();
+    }
   }
 
   private void validatePopulation() {

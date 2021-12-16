@@ -1,7 +1,7 @@
 package pl.edu.agh.genetic.operations.crossovers;
 
-import org.apache.commons.lang3.SerializationUtils;
 import pl.edu.agh.genetic.model.Chromosome;
+import pl.edu.agh.genetic.model.Gradient;
 import pl.edu.agh.genetic.utils.RandomUtils;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.BitSet;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SimpleCrossover implements Crossover {
+public class GradientBasedCrossover implements Crossover, Gradient {
 
   @Override
   public List<Chromosome> performCrossover(List<Chromosome> parents) {
@@ -25,44 +25,65 @@ public class SimpleCrossover implements Crossover {
     return parents.get(RandomUtils.getRandomIntInRange(0, parents.size()));
   }
 
-  boolean isUndefined(List<BitSet> bitSetList) {
-    return bitSetList.stream()
-        .anyMatch(
-            bitSet ->
-                (bitSet.get(52, 63).cardinality() == 11 && bitSet.get(0, 52).cardinality() == 0)
-                    || (bitSet.get(52, 63).cardinality() == 11
-                        && bitSet.get(0, 52).cardinality() != 0));
-  }
-
   private List<Chromosome> createTwoNewChromosomes(
       Chromosome firstChromosome, Chromosome secondChromosome) {
+    Chromosome greaterGradientLenChromosome;
+    Chromosome smallerGradientLenChromosome;
+
+    if (firstChromosome.getLenOfGradVector() > secondChromosome.getLenOfGradVector()) {
+      greaterGradientLenChromosome = firstChromosome;
+      smallerGradientLenChromosome = secondChromosome;
+    } else if (firstChromosome.getLenOfGradVector() < secondChromosome.getLenOfGradVector()) {
+      greaterGradientLenChromosome = secondChromosome;
+      smallerGradientLenChromosome = firstChromosome;
+    } else {
+      return List.of(firstChromosome, secondChromosome);
+    }
 
     int numberOfBits = Double.SIZE * firstChromosome.getNumberOfDoublesCoded();
-    int crossoverPoint = RandomUtils.getRandomIntInRange(1, numberOfBits - 1);
+    int crossoverPoint =
+        (int)
+            (numberOfBits
+                * greaterGradientLenChromosome.getLenOfGradVector()
+                / (firstChromosome.getLenOfGradVector() + secondChromosome.getLenOfGradVector()));
     int crossoverDoubleNumber = crossoverPoint / Double.SIZE;
     int crossoverPointInDouble = crossoverPoint % Double.SIZE;
 
-    Chromosome firstNewChromosome =
-        createChromosome(
-            firstChromosome.getCodedChromosome(),
-            secondChromosome.getCodedChromosome(),
-            crossoverDoubleNumber,
-            crossoverPointInDouble);
-    firstNewChromosome =
-        isUndefined(firstNewChromosome.getCodedChromosome())
-            ? SerializationUtils.clone(firstChromosome)
-            : firstNewChromosome;
+    int reversedCrossoverPoint = numberOfBits - crossoverPoint;
+    int reversedCrossoverDoubleNumber = reversedCrossoverPoint / Double.SIZE;
+    int reversedCrossoverPointInDouble = reversedCrossoverPoint % Double.SIZE;
 
-    Chromosome secondNewChromosome =
-        createChromosome(
-            secondChromosome.getCodedChromosome(),
-            firstChromosome.getCodedChromosome(),
-            crossoverDoubleNumber,
-            crossoverPointInDouble);
-    secondNewChromosome =
-        isUndefined(secondNewChromosome.getCodedChromosome())
-            ? SerializationUtils.clone(secondChromosome)
-            : secondNewChromosome;
+    Chromosome firstNewChromosome;
+    Chromosome secondNewChromosome;
+    if (crossoverPoint < numberOfBits / 2) {
+      firstNewChromosome =
+          createChromosome(
+              greaterGradientLenChromosome.getCodedChromosome(),
+              smallerGradientLenChromosome.getCodedChromosome(),
+              crossoverDoubleNumber,
+              crossoverPointInDouble);
+
+      secondNewChromosome =
+          createChromosome(
+              smallerGradientLenChromosome.getCodedChromosome(),
+              greaterGradientLenChromosome.getCodedChromosome(),
+              reversedCrossoverDoubleNumber,
+              reversedCrossoverPointInDouble);
+    } else {
+      firstNewChromosome =
+          createChromosome(
+              smallerGradientLenChromosome.getCodedChromosome(),
+              greaterGradientLenChromosome.getCodedChromosome(),
+              crossoverDoubleNumber,
+              crossoverPointInDouble);
+
+      secondNewChromosome =
+          createChromosome(
+              greaterGradientLenChromosome.getCodedChromosome(),
+              smallerGradientLenChromosome.getCodedChromosome(),
+              reversedCrossoverDoubleNumber,
+              reversedCrossoverPointInDouble);
+    }
 
     return List.of(firstNewChromosome, secondNewChromosome);
   }
@@ -90,9 +111,9 @@ public class SimpleCrossover implements Crossover {
                 crossoverPointInDouble);
         newCodedChromosome.add(mixedBitset);
       } else if (doubleNumber < crossoverDoubleNumber) {
-        newCodedChromosome.add(SerializationUtils.clone(firstPartChromosome.get(doubleNumber)));
-      } else if (doubleNumber > crossoverDoubleNumber) {
-        newCodedChromosome.add(SerializationUtils.clone(secondPartChromosome.get(doubleNumber)));
+        newCodedChromosome.add(firstPartChromosome.get(doubleNumber));
+      } else {
+        newCodedChromosome.add(secondPartChromosome.get(doubleNumber));
       }
     }
     Chromosome newChromosome = new Chromosome(firstPartChromosome.size());

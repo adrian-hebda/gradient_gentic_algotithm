@@ -16,7 +16,7 @@ public class AlgorithmMetadata {
                 "numberOfGenerations=" + numberOfGenerations +
                 ", numberOfGenerationsWithoutImprovement=" + numberOfGenerationsWithoutImprovement +
                 ", numberOfFitnessFunctionsExecutions=" + numberOfFitnessFunctionsExecutions +
-                ", bestChromosome.x=" + bestChromosome.getCodedChrmosomeAsDoubleList() +
+                ", bestChromosome.x=" + bestChromosome.getCodedChromosomeAsDoubleList() +
                 ", bestChromosome.fitness=" + bestChromosome.getFitness();
     }
 }
