@@ -4,6 +4,7 @@ import pl.edu.agh.genetic.model.Constraint;
 
 import java.util.List;
 
+import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 
 public class BealeFunction extends Function implements GradientFunction {
@@ -46,7 +47,7 @@ public class BealeFunction extends Function implements GradientFunction {
 
   @Override
   public Double getFitness() {
-    return 1000 / result;
+    return 1000 / abs(result);
   }
 
   @Override
