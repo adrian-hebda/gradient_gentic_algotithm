@@ -69,13 +69,19 @@ public class GeneticAlgorithm {
   }
 
   private void runCoreAlgorithm() {
-    Chromosome fittest = SerializationUtils.clone(population.getFittest());
+
     List<Chromosome> matingPool = selection.performSelection(population);
     List<Chromosome> newChromosomes = crossover.performCrossover(matingPool);
+    // saveFittest(newChromosomes);
+    population.setPopulation(newChromosomes);
+    population.calculateFitness();
+    mutation.performMutation(population);
+  }
+
+  private void saveFittest(List<Chromosome> newChromosomes) {
+    Chromosome fittest = population.getFittest();
     newChromosomes.set(
         RandomUtils.getRandomIntInRange(0, population.getPopulation().size()), fittest);
-    population.setPopulation(newChromosomes);
-    mutation.performMutation(population);
   }
 
   private void updateMetadata() {

@@ -1,7 +1,7 @@
 package pl.edu.agh.genetic.operations.crossovers;
 
-import org.apache.commons.lang3.SerializationUtils;
 import pl.edu.agh.genetic.model.Chromosome;
+import pl.edu.agh.genetic.utils.BitSetUtils;
 import pl.edu.agh.genetic.utils.RandomUtils;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.BitSet;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SimpleCrossover implements Crossover {
+public class OnePointCrossover implements IOnePointCrossover {
 
   @Override
   public List<Chromosome> performCrossover(List<Chromosome> parents) {
@@ -21,17 +21,8 @@ public class SimpleCrossover implements Crossover {
     return chromosomesAfterCrossover;
   }
 
-  private Chromosome chooseRandomParent(List<Chromosome> parents) {
-    return parents.get(RandomUtils.getRandomIntInRange(0, parents.size()));
-  }
-
   boolean isUndefined(List<BitSet> bitSetList) {
-    return bitSetList.stream()
-        .anyMatch(
-            bitSet ->
-                (bitSet.get(52, 63).cardinality() == 11 && bitSet.get(0, 52).cardinality() == 0)
-                    || (bitSet.get(52, 63).cardinality() == 11
-                        && bitSet.get(0, 52).cardinality() != 0));
+    return bitSetList.stream().anyMatch(BitSetUtils::isUndefined);
   }
 
   private List<Chromosome> createTwoNewChromosomes(
@@ -50,7 +41,7 @@ public class SimpleCrossover implements Crossover {
             crossoverPointInDouble);
     firstNewChromosome =
         isUndefined(firstNewChromosome.getCodedChromosome())
-            ? SerializationUtils.clone(firstChromosome)
+            ? firstChromosome // SerializationUtils.clone(firstChromosome)
             : firstNewChromosome;
 
     Chromosome secondNewChromosome =
@@ -61,7 +52,7 @@ public class SimpleCrossover implements Crossover {
             crossoverPointInDouble);
     secondNewChromosome =
         isUndefined(secondNewChromosome.getCodedChromosome())
-            ? SerializationUtils.clone(secondChromosome)
+            ? secondChromosome // SerializationUtils.clone(secondChromosome)
             : secondNewChromosome;
 
     return List.of(firstNewChromosome, secondNewChromosome);
@@ -90,34 +81,15 @@ public class SimpleCrossover implements Crossover {
                 crossoverPointInDouble);
         newCodedChromosome.add(mixedBitset);
       } else if (doubleNumber < crossoverDoubleNumber) {
-        newCodedChromosome.add(SerializationUtils.clone(firstPartChromosome.get(doubleNumber)));
+        newCodedChromosome.add(
+            BitSetUtils.toFixedSizeBitset(firstPartChromosome.get(doubleNumber)));
       } else if (doubleNumber > crossoverDoubleNumber) {
-        newCodedChromosome.add(SerializationUtils.clone(secondPartChromosome.get(doubleNumber)));
+        newCodedChromosome.add(
+            BitSetUtils.toFixedSizeBitset(secondPartChromosome.get(doubleNumber)));
       }
     }
     Chromosome newChromosome = new Chromosome(firstPartChromosome.size());
     newChromosome.setCodedChromosome(newCodedChromosome);
     return newChromosome;
-  }
-
-  private BitSet createMixedBitset(
-      BitSet firstChromosomeBitSet, BitSet secondChromosomeBitSet, int crossoverPointInDouble) {
-    BitSet newBitSet = new BitSet(Double.SIZE);
-    for (int bitIndex = 0; bitIndex < Double.SIZE; bitIndex++) {
-      if (bitIndex < crossoverPointInDouble) {
-        setBitDependingOnOtherBitset(firstChromosomeBitSet, bitIndex, newBitSet);
-      } else {
-        setBitDependingOnOtherBitset(secondChromosomeBitSet, bitIndex, newBitSet);
-      }
-    }
-    return newBitSet;
-  }
-
-  private void setBitDependingOnOtherBitset(BitSet bitPattern, int index, BitSet newBitSet) {
-    if (bitPattern.get(index)) {
-      newBitSet.set(index);
-    } else {
-      newBitSet.clear(index);
-    }
   }
 }

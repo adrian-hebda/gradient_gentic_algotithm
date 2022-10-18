@@ -16,8 +16,10 @@ public class RastriginFunction extends Function {
   }
 
   @Override
-  public double calculateResult(Double... parameters) {
+  public double calculate(Double... parameters) {
     validateNumberOfParameters(parameters);
+    double result;
+
     for (int i = 0; i < parameters.length; i++) {
       if (parameters[i] > variablesConstraints.get(i).getUpperBound()
           || parameters[i] < variablesConstraints.get(i).getLowerBound()) {
@@ -41,7 +43,7 @@ public class RastriginFunction extends Function {
   }
 
   @Override
-  public Double getFitness() {
+  public Double getFitness(Double result) {
     return 1000 / abs(result);
   }
 

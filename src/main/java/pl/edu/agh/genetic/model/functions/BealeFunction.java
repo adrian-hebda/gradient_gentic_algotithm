@@ -16,7 +16,8 @@ public class BealeFunction extends Function implements GradientFunction {
   }
 
   @Override
-  public double calculateResult(Double... parameters) {
+  public double calculate(Double... parameters) {
+    double result;
     Double x = parameters[0];
     Double y = parameters[1];
     if (x > variablesConstraints.get(0).getUpperBound()
@@ -46,8 +47,8 @@ public class BealeFunction extends Function implements GradientFunction {
   }
 
   @Override
-  public Double getFitness() {
-    return 1000 / abs(result);
+  public Double getFitness(Double result) {
+    return result == 0 ? Double.MAX_VALUE : 1000 / abs(result);
   }
 
   @Override

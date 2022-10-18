@@ -16,8 +16,10 @@ public class HimmelblauFunction extends Function implements GradientFunction {
   }
 
   @Override
-  public double calculateResult(Double... parameters) {
+  public double calculate(Double... parameters) {
     validateNumberOfParameters(parameters);
+    double result;
+
     Double x = parameters[0];
     Double y = parameters[1];
     if (x > variablesConstraints.get(0).getUpperBound()
@@ -38,13 +40,21 @@ public class HimmelblauFunction extends Function implements GradientFunction {
   public Double[] calculateGradient(Double... parameters) {
     double x = parameters[0];
     double y = parameters[1];
-    double dx =  preventNotDefinedValues(2 * (-7 + x + pow(y, 2) + 2 * x * (-11 + pow(x, 2) + y)));
-    double dy =  preventNotDefinedValues(2 * (-11 + pow(x, 2) + y + 2 * y * (-7 + x + pow(y, 2))));
-    return new Double[] {dx, dy};
+    double precision = 0.00001;
+    double difference = 2*precision;
+    double xSubPrecision = x - precision;
+    double ySubPrecision = y - precision;
+    double xAddPrecision = x + precision;
+    double yAddPrecision = y + precision;
+
+    double dx = (calculate(xSubPrecision, y) - calculate(xAddPrecision, y)) / difference;
+    double dy = (calculate(x, ySubPrecision) - calculate(x, yAddPrecision)) / difference;
+
+    return new Double[]{dx, dy};
   }
 
   @Override
-  public Double getFitness() {
+  public Double getFitness(Double result) {
     return 1000 / abs(result);
   }
 

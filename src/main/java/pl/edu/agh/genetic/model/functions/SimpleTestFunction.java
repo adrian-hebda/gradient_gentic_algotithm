@@ -8,15 +8,16 @@ import java.util.List;
 @Getter
 public class SimpleTestFunction extends Function implements GradientFunction {
 
-  private SimpleTestFunction() {
+  public SimpleTestFunction() {
     variablesConstraints = List.of(new Constraint(-4.5, 4.5), new Constraint(-4.5, 4.5));
     numberOfExecutions = 0;
     NUMBER_OF_PARAMETERS = 2;
   }
 
   @Override
-  public double calculateResult(Double... parameters) {
+  public double calculate(Double... parameters) {
     validateNumberOfParameters(parameters);
+    double result;
     Double x = parameters[0];
     Double y = parameters[1];
     if (x > variablesConstraints.get(0).getUpperBound()
@@ -42,8 +43,8 @@ public class SimpleTestFunction extends Function implements GradientFunction {
   }
 
   @Override
-  public Double getFitness() {
-    return 1000 / result;
+  public Double getFitness(Double result) {
+    return 100 / result;
   }
 
 }

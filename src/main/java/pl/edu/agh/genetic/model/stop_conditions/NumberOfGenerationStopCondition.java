@@ -6,8 +6,8 @@ public class NumberOfGenerationStopCondition implements StopCondition {
 
   private int maxNumberOfGenerations = 100;
 
-  public NumberOfGenerationStopCondition(int maxNumberOfGenerationsWithoutImprovement) {
-    this.maxNumberOfGenerations = maxNumberOfGenerationsWithoutImprovement;
+  public NumberOfGenerationStopCondition(int maxNumberOfGenerations) {
+    this.maxNumberOfGenerations = maxNumberOfGenerations;
   }
 
   @Override

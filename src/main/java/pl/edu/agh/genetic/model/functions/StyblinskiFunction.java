@@ -21,8 +21,10 @@ public class StyblinskiFunction extends Function implements GradientFunction {
   }
 
   @Override
-  public double calculateResult(Double... parameters) {
+  public double calculate(Double... parameters) {
     validateNumberOfParameters(parameters);
+    double result;
+
     for (int i = 0; i < parameters.length; i++) {
       if (parameters[i] > variablesConstraints.get(i).getUpperBound()
           || parameters[i] < variablesConstraints.get(i).getLowerBound()) {
@@ -37,7 +39,7 @@ public class StyblinskiFunction extends Function implements GradientFunction {
     double q = parameters[3];
 
     double functionValue =
-        ((pow(x, 4) - (16 * pow(x, 2)) + (5 * x))
+                 ((pow(x, 4) - (16 * pow(x, 2)) + (5 * x))
                 + (pow(y, 4) - (16 * pow(y, 2)) + (5 * y))
                 + (pow(z, 4) - (16 * pow(z, 2)) + (5 * z))
                 + (pow(q, 4) - (16 * pow(q, 2)) + (5 * q)))
@@ -61,8 +63,8 @@ public class StyblinskiFunction extends Function implements GradientFunction {
   }
 
   @Override
-  public Double getFitness() {
-    return 1000 / abs( (-1 * result) - (NUMBER_OF_PARAMETERS * 39.166165));
+  public Double getFitness(Double result) {
+    return pow(1e5 / abs((-1.0 * result) - (NUMBER_OF_PARAMETERS * 39.166165)),3);
   }
 
 }

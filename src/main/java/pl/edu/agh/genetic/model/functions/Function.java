@@ -10,9 +10,8 @@ public abstract class Function {
   public static int NUMBER_OF_PARAMETERS = -1;
   protected int numberOfExecutions = -1;
   protected List<Constraint> variablesConstraints = new ArrayList<>();
-  protected Double result;
 
-  public abstract double calculateResult(Double... parameters);
+  public abstract double calculate(Double... parameters);
 
   public List<Constraint> getVariablesConstraints() {
     return variablesConstraints;
@@ -26,7 +25,7 @@ public abstract class Function {
     return numberOfExecutions;
   }
 
-  public abstract Double getFitness();
+  public abstract Double getFitness(Double result);
 
   double preventNotDefinedValues(double result) {
     if (Double.POSITIVE_INFINITY == result) {
