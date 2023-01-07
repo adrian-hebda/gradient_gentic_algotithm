@@ -44,7 +44,7 @@ public class SimpleTestFunction extends Function implements GradientFunction {
 
   @Override
   public Double getFitness(Double result) {
-    return 100 / result;
+    return 1 / result;
   }
 
 }

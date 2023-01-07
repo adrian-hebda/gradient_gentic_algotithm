@@ -29,7 +29,12 @@ public class SimpleSelection implements Selection {
                     Double.isFinite(chromosome.getFitness())
                         ? chromosome.getFitness()
                         : Double.MAX_VALUE)
-            .map(fitness -> fitness / finalSum)
+            .map(
+                fitness -> {
+                  double x = fitness / finalSum;
+                  if (x > 1.0) throw new RuntimeException();
+                  return x;
+                })
             .toArray();
     double randomDouble = RandomUtils.getRandomDoubleInRange(0.0, 1.0);
     for (int i = 0; i < population.getPopulation().size(); i++) {

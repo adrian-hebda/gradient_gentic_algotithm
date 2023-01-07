@@ -4,7 +4,7 @@ import pl.edu.agh.genetic.model.AlgorithmMetadata;
 
 public class NumberOfGenerationStopCondition implements StopCondition {
 
-  private int maxNumberOfGenerations = 100;
+  private int maxNumberOfGenerations;
 
   public NumberOfGenerationStopCondition(int maxNumberOfGenerations) {
     this.maxNumberOfGenerations = maxNumberOfGenerations;

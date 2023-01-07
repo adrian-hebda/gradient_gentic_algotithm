@@ -29,7 +29,7 @@ public class Population {
   }
 
   public void calculateFitness() {
-    population.forEach(chromosome -> chromosome.calculateFitness(function));
+    population.stream().forEach(chromosome -> chromosome.calculateFitness(function));
     fittest =
         population.stream()
             .max(Comparator.comparing(Chromosome::getFitness))

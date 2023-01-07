@@ -4,13 +4,12 @@ import pl.edu.agh.genetic.model.Constraint;
 
 import java.util.List;
 
-import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 
-public class BealeFunction extends Function implements GradientFunction {
-
-  public BealeFunction() {
-    variablesConstraints = List.of(new Constraint(-4.5, 4.5), new Constraint(-4.5, 4.5));
+public class RosenbrockFunction extends Function implements GradientFunction {
+  public RosenbrockFunction() {
+    variablesConstraints =
+        List.of(new Constraint(-4.0, 4.0), new Constraint(-4.0, 4.0));
     numberOfExecutions = 0;
     NUMBER_OF_PARAMETERS = 2;
   }
@@ -26,10 +25,7 @@ public class BealeFunction extends Function implements GradientFunction {
         || y < variablesConstraints.get(1).getLowerBound()) {
       return Double.MAX_VALUE;
     }
-    double functionValue =
-        pow(1.5 - x + x * y, 2)
-            + pow(2.25 - x + x * pow(y, 2), 2)
-            + pow(2.625 - x + x * pow(y, 3), 2);
+    double functionValue = (100 * pow((x - pow(y, 2)), 2)) + pow(1 - y, 2);
     numberOfExecutions++;
     result = preventNotDefinedValues(functionValue);
     return result;
@@ -60,9 +56,11 @@ public class BealeFunction extends Function implements GradientFunction {
     double xAddPrecision = x + precision;
     double yAddPrecision = y + precision;
 
-    double dx = (calculate(xAddPrecision, y) - calculate(xSubPrecision, y)) / xAddPrecision - xSubPrecision;
-    double dy = (calculate(x, yAddPrecision) - calculate(x, ySubPrecision)) / yAddPrecision - ySubPrecision;
+    double dx =
+        (calculate(xAddPrecision, y) - calculate(xSubPrecision, y)) / xAddPrecision - xSubPrecision;
+    double dy =
+        (calculate(x, yAddPrecision) - calculate(x, ySubPrecision)) / yAddPrecision - ySubPrecision;
 
-    return new Double[]{dx, dy};
+    return new Double[] {dx, dy};
   }
 }

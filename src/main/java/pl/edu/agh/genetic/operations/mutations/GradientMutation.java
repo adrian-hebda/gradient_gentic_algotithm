@@ -24,10 +24,10 @@ public class GradientMutation implements Mutation {
     }
 
     private void flipMutationConditionFulfilled(BitSet bitSet, double gradientVectorLen) {
-        double gradCoefficient = 3*exp(-pow(gradientVectorLen, 1.0/5.0));
+        double gradCoefficient = exp(-pow(gradientVectorLen, 1.0/2.0)) + 0.4;
         for (int i = 0; i < bitSet.size(); i++) {
             double random = Math.random();
-            double mutationRate = fixedMutationRate + (fixedMutationRate * gradCoefficient);
+            double mutationRate = fixedMutationRate * gradCoefficient;
             if (random < mutationRate) {
                 flip(bitSet, i);
             }

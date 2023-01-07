@@ -36,24 +36,22 @@ public class MatyasFunction extends Function implements GradientFunction {
 
     @Override
     public Double getFitness(Double result) {
-        return sqrt(10e2/result);
+        return 1/result;
     }
 
     @Override
     public Double[] calculateGradient(Double... parameters) {
         double x = parameters[0];
         double y = parameters[1];
-        double precision = 0.01;
-        double difference = 2*precision;
+        double precision = 0.00001;
         double xSubPrecision = x - precision;
         double ySubPrecision = y - precision;
         double xAddPrecision = x + precision;
         double yAddPrecision = y + precision;
 
-        double dx = (calculate(xSubPrecision, y) - calculate(xAddPrecision, y)) / difference;
-        double dy = (calculate(x, ySubPrecision) - calculate(x, yAddPrecision)) / difference;
+        double dx = (calculate(xAddPrecision, y) - calculate(xSubPrecision, y)) / xAddPrecision - xSubPrecision;
+        double dy = (calculate(x, yAddPrecision) - calculate(x, ySubPrecision)) / yAddPrecision - ySubPrecision;
 
         return new Double[]{dx, dy};
-
     }
 }

@@ -16,4 +16,17 @@ public interface Crossover {
   default void setBitDependingOnOtherBitset(BitSet bitPattern, int index, BitSet newBitSet) {
     newBitSet.set(index, bitPattern.get(index));
   }
+
+  default BitSet createMixedBitset(
+          BitSet firstChromosomeBitSet, BitSet secondChromosomeBitSet, int crossoverPointInDouble) {
+    BitSet newBitSet = new BitSet(Double.SIZE);
+    for (int bitIndex = 0; bitIndex < Double.SIZE; bitIndex++) {
+      if (bitIndex < crossoverPointInDouble) {
+        setBitDependingOnOtherBitset(firstChromosomeBitSet, bitIndex, newBitSet);
+      } else {
+        setBitDependingOnOtherBitset(secondChromosomeBitSet, bitIndex, newBitSet);
+      }
+    }
+    return newBitSet;
+  }
 }

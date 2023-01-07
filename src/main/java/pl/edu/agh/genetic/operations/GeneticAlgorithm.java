@@ -15,9 +15,11 @@ import pl.edu.agh.genetic.model.stop_conditions.StopCondition;
 import pl.edu.agh.genetic.operations.crossovers.Crossover;
 import pl.edu.agh.genetic.operations.mutations.Mutation;
 import pl.edu.agh.genetic.operations.selections.Selection;
+import pl.edu.agh.genetic.utils.BitSetUtils;
 import pl.edu.agh.genetic.utils.RandomUtils;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
 
@@ -56,14 +58,15 @@ public class GeneticAlgorithm {
   public Chromosome runAlgorithm() {
     validateRun();
     population.calculateFitness();
-    while (stopConditions.stream()
-        .noneMatch(stopCondition -> stopCondition.isStopConditionMet(metadata))) {
+
+    do {
       preSteps.forEach(step -> step.performStep(population, this));
       runCoreAlgorithm();
       postSteps.forEach(step -> step.performStep(population, this));
       population.calculateFitness();
       updateMetadata();
-    }
+    } while (stopConditions.stream()
+        .noneMatch(stopCondition -> stopCondition.isStopConditionMet(metadata)));
 
     return metadata.getBestChromosome();
   }

@@ -26,8 +26,7 @@ public class HimmelblauFunction extends Function implements GradientFunction {
         || x < variablesConstraints.get(0).getLowerBound()
         || y > variablesConstraints.get(1).getUpperBound()
         || y < variablesConstraints.get(1).getLowerBound()) {
-      result = Double.MAX_VALUE;
-      return abs(result);
+      return Double.MAX_VALUE;
     }
 
     double functionValue = pow((x * x) + y - 11, 2) + pow(x + (y * y) - 7, 2);
@@ -41,21 +40,20 @@ public class HimmelblauFunction extends Function implements GradientFunction {
     double x = parameters[0];
     double y = parameters[1];
     double precision = 0.00001;
-    double difference = 2*precision;
     double xSubPrecision = x - precision;
     double ySubPrecision = y - precision;
     double xAddPrecision = x + precision;
     double yAddPrecision = y + precision;
 
-    double dx = (calculate(xSubPrecision, y) - calculate(xAddPrecision, y)) / difference;
-    double dy = (calculate(x, ySubPrecision) - calculate(x, yAddPrecision)) / difference;
+    double dx = (calculate(xAddPrecision, y) - calculate(xSubPrecision, y)) / xAddPrecision - xSubPrecision;
+    double dy = (calculate(x, yAddPrecision) - calculate(x, ySubPrecision)) / yAddPrecision - ySubPrecision;
 
     return new Double[]{dx, dy};
   }
 
   @Override
   public Double getFitness(Double result) {
-    return 1000 / abs(result);
+    return 1 / result;
   }
 
 }

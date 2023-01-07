@@ -4,7 +4,7 @@ import pl.edu.agh.genetic.model.AlgorithmMetadata;
 
 public class NoImprovementStopCondition implements StopCondition {
 
-  private int maxNumberOfGenerationsWithoutImprovement = 10;
+  private int maxNumberOfGenerationsWithoutImprovement;
 
   public NoImprovementStopCondition(int maxNumberOfGenerationsWithoutImprovement) {
     this.maxNumberOfGenerationsWithoutImprovement = maxNumberOfGenerationsWithoutImprovement;

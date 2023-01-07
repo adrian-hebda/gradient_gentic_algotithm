@@ -4,13 +4,12 @@ import pl.edu.agh.genetic.model.Constraint;
 
 import java.util.List;
 
-import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 
-public class BealeFunction extends Function implements GradientFunction {
+public class GoldsteinFunction extends Function implements GradientFunction {
 
-  public BealeFunction() {
-    variablesConstraints = List.of(new Constraint(-4.5, 4.5), new Constraint(-4.5, 4.5));
+  public GoldsteinFunction() {
+    variablesConstraints = List.of(new Constraint(-2, 2), new Constraint(-2, 2));
     numberOfExecutions = 0;
     NUMBER_OF_PARAMETERS = 2;
   }
@@ -24,30 +23,28 @@ public class BealeFunction extends Function implements GradientFunction {
         || x < variablesConstraints.get(0).getLowerBound()
         || y > variablesConstraints.get(1).getUpperBound()
         || y < variablesConstraints.get(1).getLowerBound()) {
-      return Double.MAX_VALUE;
+      result = Double.MAX_VALUE;
+      return result;
     }
-    double functionValue =
-        pow(1.5 - x + x * y, 2)
-            + pow(2.25 - x + x * pow(y, 2), 2)
-            + pow(2.625 - x + x * pow(y, 3), 2);
+    double a =
+        1
+            + (pow((x + y + 1), 2)
+                * (19 - (14 * x) + (3 * pow(x, 2)) - (14 * y) + (6 * x * y) + (3 * pow(y, 2))));
+    double b =
+        30
+            + (pow(((2 * x) - (3 * y)), 2)
+                * (18 - (32 * x) + (12 * pow(x, 2)) + (48 * y) - (36 * x * y) + (27 * pow(y, 2))));
+    double functionValue = a * b;
+
     numberOfExecutions++;
+
     result = preventNotDefinedValues(functionValue);
     return result;
   }
 
   @Override
-  public int getRequiredNumberOfParameters() {
-    return NUMBER_OF_PARAMETERS;
-  }
-
-  @Override
-  public int getNumberOfExecutions() {
-    return numberOfExecutions;
-  }
-
-  @Override
   public Double getFitness(Double result) {
-    return 1 / result;
+    return 1 / (result - 3) ;
   }
 
   @Override
@@ -60,9 +57,11 @@ public class BealeFunction extends Function implements GradientFunction {
     double xAddPrecision = x + precision;
     double yAddPrecision = y + precision;
 
-    double dx = (calculate(xAddPrecision, y) - calculate(xSubPrecision, y)) / xAddPrecision - xSubPrecision;
-    double dy = (calculate(x, yAddPrecision) - calculate(x, ySubPrecision)) / yAddPrecision - ySubPrecision;
+    double dx =
+        (calculate(xAddPrecision, y) - calculate(xSubPrecision, y)) / xAddPrecision - xSubPrecision;
+    double dy =
+        (calculate(x, yAddPrecision) - calculate(x, ySubPrecision)) / yAddPrecision - ySubPrecision;
 
-    return new Double[]{dx, dy};
+    return new Double[] {dx, dy};
   }
 }
