@@ -15,7 +15,7 @@ public class GradientMutation implements Mutation {
 
     @Override
     public void performMutation(Population population) {
-        for (var chromosome : population.getPopulation()) {
+        for (var chromosome : population.getChromosomes()) {
             double lenOfGradVector = chromosome.getGradient().getLenOfGradVector();
             for (var number : chromosome.getCodedChromosome()) {
                 flipMutationConditionFulfilled(number, lenOfGradVector);

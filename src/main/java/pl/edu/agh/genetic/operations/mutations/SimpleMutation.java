@@ -3,7 +3,6 @@ package pl.edu.agh.genetic.operations.mutations;
 import pl.edu.agh.genetic.model.Population;
 
 import java.util.BitSet;
-import java.util.Random;
 
 public class SimpleMutation implements Mutation {
 
@@ -15,7 +14,7 @@ public class SimpleMutation implements Mutation {
 
     @Override
     public void performMutation(Population population) {
-        population.getPopulation().stream()
+        population.getChromosomes().stream()
                 .flatMap(chromosome -> chromosome.getCodedChromosome().stream())
                 .forEach(this::flipMutationConditionFulfilled);
     }

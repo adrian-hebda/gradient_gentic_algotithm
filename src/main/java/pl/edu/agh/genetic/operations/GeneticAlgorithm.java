@@ -1,7 +1,6 @@
 package pl.edu.agh.genetic.operations;
 
 import lombok.Builder;
-import org.apache.commons.lang3.SerializationUtils;
 import pl.edu.agh.genetic.exceptions.FunctionDoesNotImplementGradientInterfaceException;
 import pl.edu.agh.genetic.exceptions.MissingRequiredOperationException;
 import pl.edu.agh.genetic.exceptions.PopulationNotGeneratedException;
@@ -15,11 +14,8 @@ import pl.edu.agh.genetic.model.stop_conditions.StopCondition;
 import pl.edu.agh.genetic.operations.crossovers.Crossover;
 import pl.edu.agh.genetic.operations.mutations.Mutation;
 import pl.edu.agh.genetic.operations.selections.Selection;
-import pl.edu.agh.genetic.utils.BitSetUtils;
-import pl.edu.agh.genetic.utils.RandomUtils;
 
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,9 +53,9 @@ public class GeneticAlgorithm {
 
   public Chromosome runAlgorithm() {
     validateRun();
-    population.calculateFitness();
 
     do {
+      population.calculateFitness();
       preSteps.forEach(step -> step.performStep(population, this));
       runCoreAlgorithm();
       postSteps.forEach(step -> step.performStep(population, this));
@@ -72,19 +68,11 @@ public class GeneticAlgorithm {
   }
 
   private void runCoreAlgorithm() {
-
     List<Chromosome> matingPool = selection.performSelection(population);
     List<Chromosome> newChromosomes = crossover.performCrossover(matingPool);
-    // saveFittest(newChromosomes);
-    population.setPopulation(newChromosomes);
+    population.setChromosomes(newChromosomes);
     population.calculateFitness();
     mutation.performMutation(population);
-  }
-
-  private void saveFittest(List<Chromosome> newChromosomes) {
-    Chromosome fittest = population.getFittest();
-    newChromosomes.set(
-        RandomUtils.getRandomIntInRange(0, population.getPopulation().size()), fittest);
   }
 
   private void updateMetadata() {
@@ -100,15 +88,21 @@ public class GeneticAlgorithm {
   }
 
   private void updateBestChromosome() {
+    Chromosome fittest = population.getFittest();
     if (metadata.getBestChromosome() == null
-        || metadata.getBestChromosome().getFitness() < population.getFittest().getFitness()) {
-      metadata.setBestChromosome(population.getFittest());
+        || metadata.getBestChromosome().getFitness() < fittest.getFitness()) {
+      metadata.setBestChromosome(new Chromosome(fittest.getNumberOfDoublesCoded(), fittest.getCodedChromosome()));
+      metadata.getBestChromosome().calculateFitness(population.getFunction());
     }
   }
 
   private void updateNumberOfGenerationWithoutImprovement() {
-    if (metadata.getBestChromosome() == null
-        || metadata.getBestChromosome().getFitness() >= population.getFittest().getFitness()) {
+    if (metadata.getBestChromosome() == null) {
+      metadata.setNumberOfGenerationsWithoutImprovement(0);
+      return;
+    }
+
+    if (metadata.getBestChromosome().getFitness() >= population.getFittest().getFitness()) {
       metadata.setNumberOfGenerationsWithoutImprovement(
           metadata.getNumberOfGenerationsWithoutImprovement() + 1);
     } else {

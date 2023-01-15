@@ -11,7 +11,7 @@ public class SimpleSelection implements Selection {
   @Override
   public List<Chromosome> performSelection(Population population) {
     List<Chromosome> matingPool = new LinkedList<>();
-    for (int i = 0; i < population.getPopulation().size() / 2; i++) {
+    for (int i = 0; i < population.getChromosomes().size() / 2; i++) {
       matingPool.add(selectChromosomeByRouletteWheel(population));
     }
     return matingPool;
@@ -19,11 +19,11 @@ public class SimpleSelection implements Selection {
 
   private Chromosome selectChromosomeByRouletteWheel(Population population) {
     double fitnessSum =
-        population.getPopulation().stream().mapToDouble(Chromosome::getFitness).sum();
+        population.getChromosomes().stream().mapToDouble(Chromosome::getFitness).sum();
 
     final double finalSum = Double.isFinite(fitnessSum) ? fitnessSum : Double.MAX_VALUE;
     double[] probabilities =
-        population.getPopulation().stream()
+        population.getChromosomes().stream()
             .mapToDouble(
                 chromosome ->
                     Double.isFinite(chromosome.getFitness())
@@ -37,12 +37,12 @@ public class SimpleSelection implements Selection {
                 })
             .toArray();
     double randomDouble = RandomUtils.getRandomDoubleInRange(0.0, 1.0);
-    for (int i = 0; i < population.getPopulation().size(); i++) {
+    for (int i = 0; i < population.getChromosomes().size(); i++) {
       randomDouble -= probabilities[i];
       if (randomDouble < 0) {
-        return population.getPopulation().get(i);
+        return population.getChromosomes().get(i);
       }
     }
-    return population.getPopulation().get(population.getPopulation().size() - 1);
+    return population.getChromosomes().get(population.getChromosomes().size() - 1);
   }
 }

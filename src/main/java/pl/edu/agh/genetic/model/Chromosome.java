@@ -7,20 +7,18 @@ import pl.edu.agh.genetic.model.functions.GradientFunction;
 import pl.edu.agh.genetic.utils.BitSetUtils;
 import pl.edu.agh.genetic.utils.RandomUtils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.List;
 
 @Data
-public class Chromosome implements Serializable {
+public class Chromosome {
     private Double fitness;
     // List of bitsets containing set of 64 bits representing double value.
     private List<BitSet> codedChromosome;
     private Integer numberOfDoublesCoded;
-    private List<Double> codedChromosomeAsDoubleList;
     private Double functionValue = Double.NaN;
-
     private GradientData gradient;
 
 
@@ -31,16 +29,7 @@ public class Chromosome implements Serializable {
         validate(numberOfDoublesCoded, constraints);
 
         for (int i = 0; i < numberOfDoublesCoded; i++) {
-            this.codedChromosome.add(generateRandomValue(constraints.get(i)));
-        }
-    }
-
-    public Chromosome(int requiredNumberOfParameters) {
-        this.numberOfDoublesCoded = requiredNumberOfParameters;
-        this.codedChromosome = new ArrayList<>(numberOfDoublesCoded);
-
-        for (int i = 0; i < numberOfDoublesCoded; i++) {
-            this.codedChromosome.add(new BitSet(Double.SIZE));
+            this.codedChromosome.add(generateRandomBitset(constraints.get(i)));
         }
     }
 
@@ -50,7 +39,6 @@ public class Chromosome implements Serializable {
         }
         this.numberOfDoublesCoded = requiredNumberOfParameters;
         this.codedChromosome = codedChromosome;
-
     }
 
     public void calculateFitness(Function function) {
@@ -65,18 +53,14 @@ public class Chromosome implements Serializable {
     private Double[] convertBitsToDoubles() {
         List<Double> list = new ArrayList<>();
         for (BitSet bitSet : codedChromosome) {
-            if (bitSet.toLongArray().length != 1) {
-                list.add(0.0);
-                continue;
-            }
             Double longBitsToDouble = BitSetUtils.toDouble(bitSet);
             list.add(longBitsToDouble);
         }
-        codedChromosomeAsDoubleList = list;
+
         return list.toArray(new Double[0]);
     }
 
-    private BitSet generateRandomValue(Constraint constraint) {
+    private BitSet generateRandomBitset(Constraint constraint) {
         double randomValue =
                 RandomUtils.getRandomDoubleInRange(constraint.getLowerBound(), constraint.getUpperBound());
         return BitSetUtils.toFixedSizeBitset(randomValue);
@@ -99,7 +83,7 @@ public class Chromosome implements Serializable {
                 + "fitness="
                 + fitness
                 + ", codedChromosomeAsDoubleList="
-                + codedChromosomeAsDoubleList
+                + Arrays.toString(convertBitsToDoubles())
                 + '}';
     }
 
@@ -116,4 +100,7 @@ public class Chromosome implements Serializable {
         }
     }
 
+    public Double[] getCodedChromosomeAsDoubleList() {
+        return convertBitsToDoubles();
+    }
 }

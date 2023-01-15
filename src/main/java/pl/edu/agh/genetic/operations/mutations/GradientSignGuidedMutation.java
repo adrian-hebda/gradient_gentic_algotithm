@@ -16,7 +16,7 @@ public class GradientSignGuidedMutation implements Mutation {
 
   @Override
   public void performMutation(Population population) {
-    for (var chromosome : population.getPopulation()) {
+    for (var chromosome : population.getChromosomes()) {
       List<BitSet> codedChromosome = chromosome.getCodedChromosome();
       for (int i = 0; i < codedChromosome.size(); i++) {
         BitSet number = codedChromosome.get(i);

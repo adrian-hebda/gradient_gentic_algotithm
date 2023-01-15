@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 public class Population {
-  private List<Chromosome> population = new ArrayList<>();
+  private List<Chromosome> chromosomes = new ArrayList<>();
   private Chromosome fittest;
   private final Function function;
 
@@ -21,7 +21,7 @@ public class Population {
     }
     this.function = function;
     for (int i = 0; i < populationSize; i++) {
-      population.add(
+      chromosomes.add(
           new Chromosome(
               function.getVariablesConstraints(), function.getRequiredNumberOfParameters()));
     }
@@ -29,19 +29,17 @@ public class Population {
   }
 
   public void calculateFitness() {
-    population.stream().forEach(chromosome -> chromosome.calculateFitness(function));
+    chromosomes.forEach(chromosome -> chromosome.calculateFitness(function));
     fittest =
-        population.stream()
+        chromosomes.stream()
             .max(Comparator.comparing(Chromosome::getFitness))
-            .orElseThrow(RuntimeException::new); // TODO exception
+            .orElseThrow(RuntimeException::new);
   }
 
-  // TODO wyciągnąć do Step
-
   public void moveByGradient(double rate) {
-    if (function instanceof GradientFunction) {
-      population.forEach(
-          chromosome -> chromosome.moveByGradient((GradientFunction) function, rate));
+    if (function instanceof GradientFunction gradientFunction) {
+      chromosomes.forEach(
+          chromosome -> chromosome.moveByGradient(gradientFunction, rate));
     } else {
       throw new FunctionDoesNotImplementGradientInterfaceException();
     }

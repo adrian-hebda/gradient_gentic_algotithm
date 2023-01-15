@@ -41,7 +41,7 @@ public class OnePointCrossover implements IOnePointCrossover {
             crossoverPointInDouble);
     firstNewChromosome =
         isUndefined(firstNewChromosome.getCodedChromosome())
-            ? firstChromosome // SerializationUtils.clone(firstChromosome)
+            ? new Chromosome(firstChromosome.getNumberOfDoublesCoded(), firstChromosome.getCodedChromosome())
             : firstNewChromosome;
 
     Chromosome secondNewChromosome =
@@ -52,7 +52,7 @@ public class OnePointCrossover implements IOnePointCrossover {
             crossoverPointInDouble);
     secondNewChromosome =
         isUndefined(secondNewChromosome.getCodedChromosome())
-            ? secondChromosome // SerializationUtils.clone(secondChromosome)
+            ?  new Chromosome(secondChromosome.getNumberOfDoublesCoded(), secondChromosome.getCodedChromosome())
             : secondNewChromosome;
 
     return List.of(firstNewChromosome, secondNewChromosome);
@@ -88,8 +88,6 @@ public class OnePointCrossover implements IOnePointCrossover {
             BitSetUtils.toFixedSizeBitset(secondPartChromosome.get(doubleNumber)));
       }
     }
-    Chromosome newChromosome = new Chromosome(firstPartChromosome.size());
-    newChromosome.setCodedChromosome(newCodedChromosome);
-    return newChromosome;
+    return new Chromosome(firstPartChromosome.size(), newCodedChromosome);
   }
 }

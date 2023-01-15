@@ -1,18 +1,15 @@
 package pl.edu.agh.genetic.utils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.BitSet;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BitSetUtils {
     public static BitSet toFixedSizeBitset(Double value){
         BitSet randomBitset = BitSet.valueOf(new long[]{Double.doubleToRawLongBits(value)});
-
-        BitSet targetBitset = new BitSet(Double.SIZE);
-        for(int i = 0; i < randomBitset.size(); ++i) {
-            if (randomBitset.get(i)) {
-                targetBitset.set(i);
-            }
-        }
-        return targetBitset;
+        return toFixedSizeBitset(randomBitset);
     }
 
     public static BitSet toFixedSizeBitset(BitSet bitSet){
@@ -27,10 +24,13 @@ public class BitSetUtils {
     }
 
     public static Double toDouble(BitSet bitSet){
-       return Double.longBitsToDouble(bitSet.toLongArray()[0]);
+    if (bitSet.isEmpty()){
+        return 0.0;
+    }
+    return Double.longBitsToDouble(bitSet.toLongArray()[0]);
     }
 
     public static boolean isUndefined(BitSet bitSet){
-        return (bitSet.get(52, 63).cardinality() == 11 && bitSet.get(0, 52).cardinality() == 0) || (bitSet.get(52, 63).cardinality() == 11 && bitSet.get(0, 52).cardinality() != 0);
+        return !Double.isFinite(toDouble(bitSet));
     }
 }

@@ -4,8 +4,6 @@ import pl.edu.agh.genetic.model.Population;
 
 import java.util.BitSet;
 
-import static java.lang.Math.log;
-
 public class BitAdjustedMutation implements Mutation {
     private final double fixedMutationRate;
 
@@ -15,7 +13,7 @@ public class BitAdjustedMutation implements Mutation {
 
     @Override
     public void performMutation(Population population) {
-        population.getPopulation().stream()
+        population.getChromosomes().stream()
                 .flatMap(chromosome -> chromosome.getCodedChromosome().stream())
                 .forEach(this::flipMutationConditionFulfilled);
     }
@@ -23,8 +21,8 @@ public class BitAdjustedMutation implements Mutation {
     private void flipMutationConditionFulfilled(BitSet bitSet) {
         for (int i = 0; i < bitSet.size(); i++) {
             double random = Math.random();
-            double bitSignificanceCoefficient = 2.0 / (i + 1.0);
-            double mutationRate = fixedMutationRate + (fixedMutationRate * bitSignificanceCoefficient);
+            double bitSignificanceCoefficient = 1.0 / (i + 1.0);
+            double mutationRate = (fixedMutationRate + (fixedMutationRate * bitSignificanceCoefficient)) * 0.5;
             if (random < mutationRate) {
                 flip(bitSet, i);
             }

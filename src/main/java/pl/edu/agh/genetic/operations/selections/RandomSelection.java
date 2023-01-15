@@ -12,11 +12,11 @@ public class RandomSelection implements Selection {
   @Override
   public List<Chromosome> performSelection(Population population) {
     List<Chromosome> matingPool = new LinkedList<>();
-    for (int i = 0; i < population.getPopulation().size() / 2; i++) {
+    for (int i = 0; i < population.getChromosomes().size() / 2; i++) {
       matingPool.add(
           population
-              .getPopulation()
-              .get(RandomUtils.getRandomIntInRange(0, population.getPopulation().size())));
+              .getChromosomes()
+              .get(RandomUtils.getRandomIntInRange(0, population.getChromosomes().size())));
     }
     return matingPool;
   }

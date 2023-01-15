@@ -22,8 +22,6 @@ public interface IMultiPointCrossover extends Crossover {
                             crossoverPoints.get(doubleNumber));
             newCodedChromosome.add(mixedBitset);
         }
-        Chromosome newChromosome = new Chromosome(firstChromosome.size());
-        newChromosome.setCodedChromosome(newCodedChromosome);
-        return newChromosome;
+    return new Chromosome(firstChromosome.size(), newCodedChromosome);
     }
 }

@@ -7,11 +7,9 @@ import pl.edu.agh.genetic.model.stop_conditions.NumberOfGenerationStopCondition;
 import pl.edu.agh.genetic.operations.GeneticAlgorithm;
 import pl.edu.agh.genetic.operations.Step;
 import pl.edu.agh.genetic.operations.crossovers.*;
-import pl.edu.agh.genetic.operations.mutations.GradientMutation;
-import pl.edu.agh.genetic.operations.mutations.GradientSignGuidedMutation;
-import pl.edu.agh.genetic.operations.mutations.Mutation;
-import pl.edu.agh.genetic.operations.mutations.SimpleMutation;
-import pl.edu.agh.genetic.operations.selections.SimpleSelection;
+import pl.edu.agh.genetic.operations.mutations.*;
+import pl.edu.agh.genetic.operations.selections.Selection;
+import pl.edu.agh.genetic.operations.selections.TournamentSelection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,58 +20,63 @@ import static java.lang.Math.sqrt;
 
 public class Main {
   public static void main(String[] args) {
+    int repetitions = 30;
     System.out.println();
     System.out.println("BASIC");
     System.out.println();
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < repetitions; i++) {
       double mutationRate = 0.001 + (i * 0.001);
       run(
           List.of(),
           new SimpleMutation(mutationRate),
-          new MultiPointCrossover(),
-          new RosenbrockFunction());
-    }
-
-    System.out.println();
-    System.out.println("GRADIENT MUTATION");
-    System.out.println();
-    for (int i = 0; i < 50; i++) {
-      double mutationRate = 0.001 + (i * 0.001);
-      run(
-          List.of(),
-          new GradientSignGuidedMutation(mutationRate),
-          new MultiPointCrossover(),
-          new RosenbrockFunction());
-    }
-
-    System.out.println();
-    System.out.println("GRADIENT MUTATION + CROSSOVER");
-    System.out.println();
-    for (int i = 0; i < 50; i++) {
-      double mutationRate = 0.001 + (i * 0.001);
-      run(
-          List.of(),
-          new GradientSignGuidedMutation(mutationRate),
-          new MultiPointGradientSignBasedCrossover(),
+          new DifferencesBasedCrossover(),
+          new TournamentSelection(),
           new RosenbrockFunction());
     }
 
     System.out.println();
     System.out.println("GRADIENT CROSSOVER");
     System.out.println();
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < repetitions; i++) {
+      double mutationRate = 0.001 + (i * 0.001);
+      run(
+              List.of(),
+              new SimpleMutation(mutationRate),
+              new RespectfulGradientCrossover(),
+              new TournamentSelection(),
+              new RosenbrockFunction());
+    }
+
+    System.out.println();
+    System.out.println("GRADIENT MUTATION");
+    System.out.println();
+    for (int i = 0; i < repetitions; i++) {
       double mutationRate = 0.001 + (i * 0.001);
       run(
           List.of(),
-          new SimpleMutation(mutationRate),
-          new MultiPointGradientSignBasedCrossover(),
+          new GradientSignGuidedMutation(mutationRate),
+          new RespectfulRandomCrossover(),
+              new TournamentSelection(),
+          new RosenbrockFunction());
+    }
+
+    System.out.println();
+    System.out.println("GRADIENT MUTATION + CROSSOVER");
+    System.out.println();
+    for (int i = 0; i < repetitions; i++) {
+      double mutationRate = 0.001 + (i * 0.001);
+      run(
+          List.of(),
+          new GradientSignGuidedMutation(mutationRate),
+          new RespectfulGradientCrossover(),
+              new TournamentSelection(),
           new RosenbrockFunction());
     }
   }
 
   static void run(
-      List<Step> gradientSteps, Mutation mutation, Crossover crossover, Function function) {
-    int testRuns = 2000;
+          List<Step> gradientSteps, Mutation mutation, Crossover crossover, Selection selection, Function function) {
+    int testRuns = 1000;
     double[] percentages = new double[24];
     double minFunValue = Double.POSITIVE_INFINITY;
     List<Integer> numberOfGenerations = new ArrayList();
@@ -84,13 +87,13 @@ public class Main {
           GeneticAlgorithm.builder()
               .crossover(crossover)
               .mutation(mutation)
-              .selection(new SimpleSelection())
+              .selection(selection)
               .postSteps(gradientSteps)
-              .populationSize(30)
+              .populationSize(40)
               .function(function)
               .stopConditions(
                   List.of(
-                          new AssumedPrecisionReachedStopCondition(1e-10),
+                          new AssumedPrecisionReachedStopCondition(1e-5),
                       new NumberOfGenerationStopCondition(1000),
                       new NoImprovementStopCondition(100)))
               .build();
@@ -159,19 +162,19 @@ public class Main {
                 .replace("[", "")
                 .replace("]", "")
             + ";"
-            //            + " Ś: "
+                        + " Ś: "
             + avgIterations
             + ";"
-            //            + " ŚBP: "
+                        + " ŚBP: "
             + avgIterationsWithoutImprovement
             + ";"
-            //            + " O: "
+                        + " O: "
             + stdDeviationNumberOfGenerations
             + ";"
-            //            + " OBP: "
+                        + " OBP: "
             + stdDeviationNumberOfGenerationsWithoutImprovement
             + ";"
-            //            + " Min: "
+                        + " Min: "
             + minFunValue);
   }
 }
