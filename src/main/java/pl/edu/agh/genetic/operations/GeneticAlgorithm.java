@@ -14,6 +14,7 @@ import pl.edu.agh.genetic.model.stop_conditions.StopCondition;
 import pl.edu.agh.genetic.operations.crossovers.Crossover;
 import pl.edu.agh.genetic.operations.mutations.Mutation;
 import pl.edu.agh.genetic.operations.selections.Selection;
+import pl.edu.agh.genetic.utils.RandomUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,7 +46,6 @@ public class GeneticAlgorithm {
     this.population = new Population(populationSize, function);
 
     this.stopConditions.addAll(stopConditions);
-    this.stopConditions.add(new FitnessFunctionIsInfinity());
 
     this.preSteps = preSteps == null ? Collections.emptyList() : preSteps;
     this.postSteps = postSteps == null ? Collections.emptyList() : postSteps;
@@ -71,8 +71,13 @@ public class GeneticAlgorithm {
     List<Chromosome> matingPool = selection.performSelection(population);
     List<Chromosome> newChromosomes = crossover.performCrossover(matingPool);
     population.setChromosomes(newChromosomes);
+    saveBestChromosome(newChromosomes);
     population.calculateFitness();
     mutation.performMutation(population);
+  }
+
+  private void saveBestChromosome(List<Chromosome> newChromosomes) {
+    population.getChromosomes().set(RandomUtils.getRandomIntInRange(0, newChromosomes.size()), metadata.getBestChromosome());
   }
 
   private void updateMetadata() {
@@ -94,6 +99,7 @@ public class GeneticAlgorithm {
       metadata.setBestChromosome(new Chromosome(fittest.getNumberOfDoublesCoded(), fittest.getCodedChromosome()));
       metadata.getBestChromosome().calculateFitness(population.getFunction());
     }
+
   }
 
   private void updateNumberOfGenerationWithoutImprovement() {

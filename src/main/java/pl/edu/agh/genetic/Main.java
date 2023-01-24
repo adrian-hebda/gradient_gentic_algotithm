@@ -9,6 +9,7 @@ import pl.edu.agh.genetic.operations.Step;
 import pl.edu.agh.genetic.operations.crossovers.*;
 import pl.edu.agh.genetic.operations.mutations.*;
 import pl.edu.agh.genetic.operations.selections.Selection;
+import pl.edu.agh.genetic.operations.selections.SimpleSelection;
 import pl.edu.agh.genetic.operations.selections.TournamentSelection;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import static java.lang.Math.sqrt;
 
 public class Main {
   public static void main(String[] args) {
-    int repetitions = 30;
+    int repetitions = 50;
     System.out.println();
     System.out.println("BASIC");
     System.out.println();
@@ -42,7 +43,7 @@ public class Main {
       run(
               List.of(),
               new SimpleMutation(mutationRate),
-              new RespectfulGradientCrossover(),
+              new DifferencesBasedGradientCrossover(),
               new TournamentSelection(),
               new RosenbrockFunction());
     }
@@ -55,7 +56,7 @@ public class Main {
       run(
           List.of(),
           new GradientSignGuidedMutation(mutationRate),
-          new RespectfulRandomCrossover(),
+          new DifferencesBasedCrossover(),
               new TournamentSelection(),
           new RosenbrockFunction());
     }
@@ -68,7 +69,7 @@ public class Main {
       run(
           List.of(),
           new GradientSignGuidedMutation(mutationRate),
-          new RespectfulGradientCrossover(),
+          new DifferencesBasedGradientCrossover(),
               new TournamentSelection(),
           new RosenbrockFunction());
     }
@@ -93,7 +94,7 @@ public class Main {
               .function(function)
               .stopConditions(
                   List.of(
-                          new AssumedPrecisionReachedStopCondition(1e-5),
+                          new AssumedPrecisionReachedStopCondition(1e-10),
                       new NumberOfGenerationStopCondition(1000),
                       new NoImprovementStopCondition(100)))
               .build();
