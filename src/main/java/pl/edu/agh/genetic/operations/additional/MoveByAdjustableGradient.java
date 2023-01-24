@@ -5,7 +5,6 @@ import pl.edu.agh.genetic.operations.GeneticAlgorithm;
 import pl.edu.agh.genetic.operations.Step;
 
 import static java.lang.StrictMath.pow;
-import static java.lang.StrictMath.sqrt;
 
 public class MoveByAdjustableGradient implements Step {
 

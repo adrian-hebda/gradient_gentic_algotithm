@@ -8,11 +8,12 @@ import static java.lang.Math.*;
 
 public class EasomFunction extends Function implements GradientFunction {
 
-    public EasomFunction(){
+    public EasomFunction() {
         variablesConstraints = List.of(new Constraint(-100, 100), new Constraint(-100, 100));
         numberOfExecutions = 0;
         NUMBER_OF_PARAMETERS = 2;
     }
+
     @Override
     public double calculate(Double... parameters) {
         double result;
@@ -26,7 +27,7 @@ public class EasomFunction extends Function implements GradientFunction {
             return result;
         }
         double functionValue =
-                -cos(x) * cos(y) * exp(-(pow(x - PI, 2) + pow(y - PI,2)));
+                -cos(x) * cos(y) * exp(-(pow(x - PI, 2) + pow(y - PI, 2)));
         numberOfExecutions++;
 
         result = preventNotDefinedValues(functionValue);
@@ -35,7 +36,7 @@ public class EasomFunction extends Function implements GradientFunction {
 
     @Override
     public Double getFitness(Double result) {
-        return 10000/(result + 1);
+        return 10000 / (result + 1);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class EasomFunction extends Function implements GradientFunction {
         double x = parameters[0];
         double y = parameters[1];
         double precision = 0.01;
-        double difference = 2*precision;
+        double difference = 2 * precision;
         double xSubPrecision = x - precision;
         double ySubPrecision = y - precision;
         double xAddPrecision = x + precision;

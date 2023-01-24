@@ -9,7 +9,6 @@ import pl.edu.agh.genetic.model.Chromosome;
 import pl.edu.agh.genetic.model.Gradient;
 import pl.edu.agh.genetic.model.Population;
 import pl.edu.agh.genetic.model.functions.Function;
-import pl.edu.agh.genetic.model.stop_conditions.FitnessFunctionIsInfinity;
 import pl.edu.agh.genetic.model.stop_conditions.StopCondition;
 import pl.edu.agh.genetic.operations.crossovers.Crossover;
 import pl.edu.agh.genetic.operations.mutations.Mutation;
@@ -21,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class GeneticAlgorithm {
+  public final AlgorithmMetadata metadata = new AlgorithmMetadata();
   private final Crossover crossover;
   private final Mutation mutation;
   private final Selection selection;
@@ -28,7 +28,6 @@ public class GeneticAlgorithm {
   private final List<Step> postSteps;
   private final Population population;
   private final List<StopCondition> stopConditions = new ArrayList<>();
-  public final AlgorithmMetadata metadata = new AlgorithmMetadata();
 
   @Builder
   public GeneticAlgorithm(
@@ -77,7 +76,8 @@ public class GeneticAlgorithm {
   }
 
   private void saveBestChromosome(List<Chromosome> newChromosomes) {
-    population.getChromosomes().set(RandomUtils.getRandomIntInRange(0, newChromosomes.size()), metadata.getBestChromosome());
+    if(metadata.getNumberOfGenerations() != 0)
+      population.getChromosomes().set(RandomUtils.getRandomIntInRange(0, newChromosomes.size()), metadata.getBestChromosome());
   }
 
   private void updateMetadata() {

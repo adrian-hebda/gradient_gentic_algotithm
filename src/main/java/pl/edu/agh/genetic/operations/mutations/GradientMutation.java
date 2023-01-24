@@ -4,7 +4,8 @@ import pl.edu.agh.genetic.model.Population;
 
 import java.util.BitSet;
 
-import static java.lang.Math.*;
+import static java.lang.Math.exp;
+import static java.lang.Math.pow;
 
 public class GradientMutation implements Mutation {
     private final double fixedMutationRate;

@@ -5,15 +5,15 @@ import pl.edu.agh.genetic.model.Constraint;
 import java.util.List;
 
 import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
 
 public class MatyasFunction extends Function implements GradientFunction {
 
-    public MatyasFunction(){
+    public MatyasFunction() {
         variablesConstraints = List.of(new Constraint(-10, 10), new Constraint(-10, 10));
         numberOfExecutions = 0;
         NUMBER_OF_PARAMETERS = 2;
     }
+
     @Override
     public double calculate(Double... parameters) {
         double result;
@@ -27,7 +27,7 @@ public class MatyasFunction extends Function implements GradientFunction {
             return result;
         }
         double functionValue =
-                (0.26 * (pow(x,2) + pow(y,2))) - (0.48*x*y);
+                (0.26 * (pow(x, 2) + pow(y, 2))) - (0.48 * x * y);
         numberOfExecutions++;
 
         result = preventNotDefinedValues(functionValue);
@@ -36,7 +36,7 @@ public class MatyasFunction extends Function implements GradientFunction {
 
     @Override
     public Double getFitness(Double result) {
-        return 1/result;
+        return 1 / result;
     }
 
     @Override

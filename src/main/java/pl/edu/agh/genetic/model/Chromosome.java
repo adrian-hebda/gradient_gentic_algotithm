@@ -34,7 +34,7 @@ public class Chromosome {
     }
 
     public Chromosome(int requiredNumberOfParameters, List<BitSet> codedChromosome) {
-        if(requiredNumberOfParameters != codedChromosome.size()){
+        if (requiredNumberOfParameters != codedChromosome.size()) {
             throw new RuntimeException("Wrong chromosome size!");
         }
         this.numberOfDoublesCoded = requiredNumberOfParameters;
@@ -89,7 +89,7 @@ public class Chromosome {
 
     public void moveByGradient(GradientFunction function, double rate) {
         Double[] functionArguments = convertBitsToDoubles();
-        if(gradient == null){
+        if (gradient == null) {
             gradient = new GradientData(function, functionArguments);
         }
 

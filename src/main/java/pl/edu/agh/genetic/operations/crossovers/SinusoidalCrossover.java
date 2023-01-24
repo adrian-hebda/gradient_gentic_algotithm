@@ -2,7 +2,6 @@ package pl.edu.agh.genetic.operations.crossovers;
 
 import pl.edu.agh.genetic.model.Chromosome;
 
-import java.time.chrono.ChronoPeriod;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;

@@ -4,7 +4,9 @@ import pl.edu.agh.genetic.model.Chromosome;
 import pl.edu.agh.genetic.model.Gradient;
 import pl.edu.agh.genetic.utils.BitSetUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.List;
 
 public class OnePointGradientBasedCrossover implements IOnePointCrossover, Gradient {
 

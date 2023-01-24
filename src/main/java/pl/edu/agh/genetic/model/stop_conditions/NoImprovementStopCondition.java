@@ -4,15 +4,15 @@ import pl.edu.agh.genetic.model.AlgorithmMetadata;
 
 public class NoImprovementStopCondition implements StopCondition {
 
-  private int maxNumberOfGenerationsWithoutImprovement;
+    private final int maxNumberOfGenerationsWithoutImprovement;
 
-  public NoImprovementStopCondition(int maxNumberOfGenerationsWithoutImprovement) {
-    this.maxNumberOfGenerationsWithoutImprovement = maxNumberOfGenerationsWithoutImprovement;
-  }
+    public NoImprovementStopCondition(int maxNumberOfGenerationsWithoutImprovement) {
+        this.maxNumberOfGenerationsWithoutImprovement = maxNumberOfGenerationsWithoutImprovement;
+    }
 
-  @Override
-  public boolean isStopConditionMet(AlgorithmMetadata algorithm) {
-    return algorithm.getNumberOfGenerationsWithoutImprovement()
-        >= maxNumberOfGenerationsWithoutImprovement;
-  }
+    @Override
+    public boolean isStopConditionMet(AlgorithmMetadata algorithm) {
+        return algorithm.getNumberOfGenerationsWithoutImprovement()
+                >= maxNumberOfGenerationsWithoutImprovement;
+    }
 }

@@ -1,7 +1,6 @@
 package pl.edu.agh.genetic.operations.crossovers;
 
 import pl.edu.agh.genetic.model.Chromosome;
-import pl.edu.agh.genetic.utils.RandomUtils;
 
 import java.util.ArrayList;
 import java.util.BitSet;

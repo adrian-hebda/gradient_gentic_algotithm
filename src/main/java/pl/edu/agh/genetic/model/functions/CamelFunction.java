@@ -13,6 +13,11 @@ public class CamelFunction extends Function implements GradientFunction {
         NUMBER_OF_PARAMETERS = 2;
     }
 
+    public static void main(String[] args) {
+        System.out.println(
+                new CamelFunction().calculate(0.0, 0.0));
+    }
+
     @Override
     public double calculate(Double... parameters) {
         validateNumberOfParameters(parameters);
@@ -27,7 +32,7 @@ public class CamelFunction extends Function implements GradientFunction {
             return Double.MAX_VALUE;
         }
 
-        double functionValue = (2.0*pow(x,2)) - (1.05 * pow(x,4)) + (pow(x,6)/6.0) + (x*y) + pow(y,2);
+        double functionValue = (2.0 * pow(x, 2)) - (1.05 * pow(x, 4)) + (pow(x, 6) / 6.0) + (x * y) + pow(y, 2);
         numberOfExecutions++;
         result = preventNotDefinedValues(functionValue);
         return result;
@@ -53,9 +58,4 @@ public class CamelFunction extends Function implements GradientFunction {
     public Double getFitness(Double result) {
         return 1 / result;
     }
-
-  public static void main(String[] args) {
-    System.out.println(
-    new CamelFunction().calculate(0.0,0.0));
-  }
 }

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class MultiPointCrossover implements IMultiPointCrossover {
 
@@ -55,12 +54,5 @@ public class MultiPointCrossover implements IMultiPointCrossover {
             : secondNewChromosome;
 
     return List.of(firstNewChromosome, secondNewChromosome);
-  }
-
-  public static String toString(BitSet bs) {
-    int len = bs.length();
-    StringBuffer buf = new StringBuffer(len);
-    for (int i = 0; i < len; i++) buf.append(bs.get(i) ? '1' : '0');
-    return buf.toString();
   }
 }

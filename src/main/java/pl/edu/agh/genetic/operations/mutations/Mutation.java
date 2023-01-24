@@ -1,7 +1,6 @@
 package pl.edu.agh.genetic.operations.mutations;
 
 import pl.edu.agh.genetic.model.Population;
-import pl.edu.agh.genetic.operations.Step;
 import pl.edu.agh.genetic.utils.BitSetUtils;
 
 import java.util.BitSet;

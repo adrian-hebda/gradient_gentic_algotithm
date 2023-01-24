@@ -4,15 +4,17 @@ import pl.edu.agh.genetic.model.Constraint;
 
 import java.util.List;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
 
 public class McCormicFunction extends Function implements GradientFunction {
 
-    public McCormicFunction(){
+    public McCormicFunction() {
         variablesConstraints = List.of(new Constraint(-1.5, 4), new Constraint(-3, 4));
         numberOfExecutions = 0;
         NUMBER_OF_PARAMETERS = 2;
     }
+
     @Override
     public double calculate(Double... parameters) {
         double result;
@@ -26,7 +28,7 @@ public class McCormicFunction extends Function implements GradientFunction {
             return result;
         }
         double functionValue =
-                sin(x+y) + pow(x-y,2) -1.5*x + 2.5*y + 1;
+                sin(x + y) + pow(x - y, 2) - 1.5 * x + 2.5 * y + 1;
         numberOfExecutions++;
 
         result = preventNotDefinedValues(functionValue);
@@ -35,7 +37,7 @@ public class McCormicFunction extends Function implements GradientFunction {
 
     @Override
     public Double getFitness(Double result) {
-        return 1/result;
+        return 1 / result;
     }
 
     @Override
