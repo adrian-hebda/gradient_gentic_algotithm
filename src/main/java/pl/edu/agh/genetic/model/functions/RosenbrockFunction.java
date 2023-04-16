@@ -15,8 +15,8 @@ public class RosenbrockFunction extends Function implements GradientFunction {
     }
 
     @Override
-    public double calculate(Double... parameters) {
-        double result;
+    public Double calculate(Double... parameters) {
+        Double result;
         Double x = parameters[0];
         Double y = parameters[1];
         if (x > variablesConstraints.get(0).getUpperBound()
@@ -25,7 +25,7 @@ public class RosenbrockFunction extends Function implements GradientFunction {
                 || y < variablesConstraints.get(1).getLowerBound()) {
             return Double.MAX_VALUE;
         }
-        double functionValue = (100 * pow((x - pow(y, 2)), 2)) + pow(1 - y, 2);
+        Double functionValue = (100 * pow((x - pow(y, 2)), 2)) + pow(1 - y, 2);
         numberOfExecutions++;
         result = preventNotDefinedValues(functionValue);
         return result;
@@ -48,17 +48,17 @@ public class RosenbrockFunction extends Function implements GradientFunction {
 
     @Override
     public Double[] calculateGradient(Double... parameters) {
-        double x = parameters[0];
-        double y = parameters[1];
-        double precision = 0.00001;
-        double xSubPrecision = x - precision;
-        double ySubPrecision = y - precision;
-        double xAddPrecision = x + precision;
-        double yAddPrecision = y + precision;
+        Double x = parameters[0];
+        Double y = parameters[1];
+        Double precision = 0.00001;
+        Double xSubPrecision = x - precision;
+        Double ySubPrecision = y - precision;
+        Double xAddPrecision = x + precision;
+        Double yAddPrecision = y + precision;
 
-        double dx =
+        Double dx =
                 (calculate(xAddPrecision, y) - calculate(xSubPrecision, y)) / xAddPrecision - xSubPrecision;
-        double dy =
+        Double dy =
                 (calculate(x, yAddPrecision) - calculate(x, ySubPrecision)) / yAddPrecision - ySubPrecision;
 
         return new Double[]{dx, dy};

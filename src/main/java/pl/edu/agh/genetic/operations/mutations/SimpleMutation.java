@@ -6,9 +6,9 @@ import java.util.BitSet;
 
 public class SimpleMutation implements Mutation {
 
-    private final double fixedMutationRate;
+    private final Double fixedMutationRate;
 
-    public SimpleMutation(double fixedMutationRate) {
+    public SimpleMutation(Double fixedMutationRate) {
         this.fixedMutationRate = fixedMutationRate;
     }
 

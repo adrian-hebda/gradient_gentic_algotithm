@@ -1,6 +1,9 @@
 package pl.edu.agh.genetic.model;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import pl.edu.agh.genetic.exceptions.FunctionDoesNotImplementGradientInterfaceException;
 import pl.edu.agh.genetic.model.functions.Function;
 import pl.edu.agh.genetic.model.functions.GradientFunction;
@@ -9,10 +12,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class Population {
     private final Function function;
     private List<Chromosome> chromosomes = new ArrayList<>();
+    @Setter(AccessLevel.NONE)
     private Chromosome fittest;
 
     public Population(int populationSize, Function function) {
@@ -36,7 +41,7 @@ public class Population {
                         .orElseThrow(RuntimeException::new);
     }
 
-    public void moveByGradient(double rate) {
+    public void moveByGradient(Double rate) {
         if (function instanceof GradientFunction gradientFunction) {
             chromosomes.forEach(
                     chromosome -> chromosome.moveByGradient(gradientFunction, rate));

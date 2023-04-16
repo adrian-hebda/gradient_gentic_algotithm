@@ -8,10 +8,10 @@ import static java.lang.StrictMath.pow;
 
 public class MoveByAdjustableGradient implements Step {
 
-  private double rate = 0.01;
-  private double multiplier = 1;
+  private Double rate = 0.01;
+  private Double multiplier = 1.0;
 
-  public MoveByAdjustableGradient(double rate) {
+  public MoveByAdjustableGradient(Double rate) {
     this.rate = rate;
   }
 

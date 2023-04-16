@@ -15,9 +15,9 @@ public class HimmelblauFunction extends Function implements GradientFunction {
     }
 
     @Override
-    public double calculate(Double... parameters) {
+    public Double calculate(Double... parameters) {
         validateNumberOfParameters(parameters);
-        double result;
+        Double result;
 
         Double x = parameters[0];
         Double y = parameters[1];
@@ -28,7 +28,7 @@ public class HimmelblauFunction extends Function implements GradientFunction {
             return Double.MAX_VALUE;
         }
 
-        double functionValue = pow((x * x) + y - 11, 2) + pow(x + (y * y) - 7, 2);
+        Double functionValue = pow((x * x) + y - 11, 2) + pow(x + (y * y) - 7, 2);
         numberOfExecutions++;
         result = preventNotDefinedValues(functionValue);
         return result;
@@ -36,16 +36,16 @@ public class HimmelblauFunction extends Function implements GradientFunction {
 
     @Override
     public Double[] calculateGradient(Double... parameters) {
-        double x = parameters[0];
-        double y = parameters[1];
-        double precision = 0.00001;
-        double xSubPrecision = x - precision;
-        double ySubPrecision = y - precision;
-        double xAddPrecision = x + precision;
-        double yAddPrecision = y + precision;
+        Double x = parameters[0];
+        Double y = parameters[1];
+        Double precision = 0.00001;
+        Double xSubPrecision = x - precision;
+        Double ySubPrecision = y - precision;
+        Double xAddPrecision = x + precision;
+        Double yAddPrecision = y + precision;
 
-        double dx = (calculate(xAddPrecision, y) - calculate(xSubPrecision, y)) / xAddPrecision - xSubPrecision;
-        double dy = (calculate(x, yAddPrecision) - calculate(x, ySubPrecision)) / yAddPrecision - ySubPrecision;
+        Double dx = (calculate(xAddPrecision, y) - calculate(xSubPrecision, y)) / xAddPrecision - xSubPrecision;
+        Double dy = (calculate(x, yAddPrecision) - calculate(x, ySubPrecision)) / yAddPrecision - ySubPrecision;
 
         return new Double[]{dx, dy};
     }

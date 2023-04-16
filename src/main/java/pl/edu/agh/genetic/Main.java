@@ -1,7 +1,6 @@
 package pl.edu.agh.genetic;
 
-import pl.edu.agh.genetic.model.functions.Function;
-import pl.edu.agh.genetic.model.functions.RosenbrockFunction;
+import pl.edu.agh.genetic.model.functions.*;
 import pl.edu.agh.genetic.model.stop_conditions.AssumedPrecisionReachedStopCondition;
 import pl.edu.agh.genetic.model.stop_conditions.NoImprovementStopCondition;
 import pl.edu.agh.genetic.model.stop_conditions.NumberOfGenerationStopCondition;
@@ -26,23 +25,173 @@ import static java.lang.Math.sqrt;
 public class Main {
     public static void main(String[] args) {
         int reps = 50;
-        int testRuns = 100;
+        int testRuns = 10000;
+        TournamentSelection selection = new TournamentSelection();
 //        runForFunction(new RosenbrockFunction(), reps, testRuns);
 //        runForFunction(new BealeFunction(), reps, testRuns);
 //        runForFunction(new HimmelblauFunction(), reps, testRuns);
+//        runForFunction(new BukinFunctionN6(), reps, testRuns);
+
+        double precision = 1e-1;
+//        System.out.println("***** Rosenbrock *****");
+//        run(
+//                List.of(),
+//                new SimpleMutation(0.025),
+//                new DifferencesBasedCrossover(),
+//                selection,
+//                new RosenbrockFunction(), testRuns, precision);
+//        run(
+//                List.of(),
+//                new SimpleMutation(0.034),
+//                new DifferencesBasedGradientCrossover(),
+//                selection,
+//                new RosenbrockFunction(), testRuns, precision);
+//        run(
+//                List.of(),
+//                new GradientSignGuidedMutation(0.032),
+//                new DifferencesBasedCrossover(),
+//                selection,
+//                new RosenbrockFunction(), testRuns, precision);
+//        run(
+//                List.of(),
+//                new GradientSignGuidedMutation(0.04),
+//                new DifferencesBasedGradientCrossover(),
+//                selection,
+//                new RosenbrockFunction(), testRuns, precision);
+//
+        System.out.println("***** Booth *****");
         run(
                 List.of(),
-                new SimpleMutation(0.02),
+                new SimpleMutation(0.038),
                 new DifferencesBasedCrossover(),
-                new TournamentSelection(),
-                new RosenbrockFunction(), 10000);
+                selection,
+                new BoothFunction(), testRuns, precision);
+        run(
+                List.of(),
+                new SimpleMutation(0.044),
+                new DifferencesBasedGradientCrossover(),
+                selection,
+                new BoothFunction(), testRuns, precision);
+        run(
+                List.of(),
+                new GradientSignGuidedMutation(0.044),
+                new DifferencesBasedCrossover(),
+                selection,
+                new BoothFunction(), testRuns, precision);
+        run(
+                List.of(),
+                new GradientSignGuidedMutation(0.035),
+                new DifferencesBasedGradientCrossover(),
+                selection,
+                new BoothFunction(), testRuns, precision);
 
+//        System.out.println("***** Himmebleau *****");
+//        run(
+//                List.of(),
+//                new SimpleMutation(0.036),
+//                new DifferencesBasedCrossover(),
+//                selection,
+//                new HimmelblauFunction(), testRuns, precision);
+//        run(
+//                List.of(),
+//                new SimpleMutation(0.042),
+//                new DifferencesBasedGradientCrossover(),
+//                selection,
+//                new HimmelblauFunction(), testRuns, precision);
+//        run(
+//                List.of(),
+//                new GradientSignGuidedMutation(0.03),
+//                new DifferencesBasedCrossover(),
+//                selection,
+//                new HimmelblauFunction(), testRuns, precision);
+//        run(
+//                List.of(),
+//                new GradientSignGuidedMutation(0.031),
+//                new DifferencesBasedGradientCrossover(),
+//                selection,
+//                new HimmelblauFunction(), testRuns, precision);
+
+
+        System.out.println("=============================================== NEW PRECISION 1E-5 =================================================================");
+        precision = 1e-5;
+
+        System.out.println("***** Rosenbrock *****");
+        run(
+                List.of(),
+                new SimpleMutation(0.031),
+                new DifferencesBasedCrossover(),
+                selection,
+                new RosenbrockFunction(), testRuns, precision);
+        run(
+                List.of(),
+                new SimpleMutation(0.037),
+                new DifferencesBasedGradientCrossover(),
+                selection,
+                new RosenbrockFunction(), testRuns, precision);
+        run(
+                List.of(),
+                new GradientSignGuidedMutation(0.040),
+                new DifferencesBasedCrossover(),
+                selection,
+                new RosenbrockFunction(), testRuns, precision);
+        run(
+                List.of(),
+                new GradientSignGuidedMutation(0.048),
+                new DifferencesBasedGradientCrossover(),
+                selection,
+                new RosenbrockFunction(), testRuns, precision);
+//
+        System.out.println("***** Booth *****");
+        run(
+                List.of(),
+                new SimpleMutation(0.028),
+                new DifferencesBasedCrossover(),
+                selection,
+                new BoothFunction(), testRuns, precision);
+        run(
+                List.of(),
+                new SimpleMutation(0.031),
+                new DifferencesBasedGradientCrossover(),
+                selection,
+                new BoothFunction(), testRuns, precision);
+        run(
+                List.of(),
+                new GradientSignGuidedMutation(0.026),
+                new DifferencesBasedCrossover(),
+                selection,
+                new BoothFunction(), testRuns, precision);
         run(
                 List.of(),
                 new GradientSignGuidedMutation(0.034),
                 new DifferencesBasedGradientCrossover(),
-                new TournamentSelection(),
-                new RosenbrockFunction(), 10000);
+                selection,
+                new BoothFunction(), testRuns, precision);
+
+        System.out.println("***** Himmebleau *****");
+        run(
+                List.of(),
+                new SimpleMutation(0.039),
+                new DifferencesBasedCrossover(),
+                selection,
+                new HimmelblauFunction(), testRuns, precision);
+        run(
+                List.of(),
+                new SimpleMutation(0.041),
+                new DifferencesBasedGradientCrossover(),
+                selection,
+                new HimmelblauFunction(), testRuns, precision);
+        run(
+                List.of(),
+                new GradientSignGuidedMutation(0.037),
+                new DifferencesBasedCrossover(),
+                selection,
+                new HimmelblauFunction(), testRuns, precision);
+        run(
+                List.of(),
+                new GradientSignGuidedMutation(0.048),
+                new DifferencesBasedGradientCrossover(),
+                selection,
+                new HimmelblauFunction(), testRuns, precision);
 
     }
 
@@ -56,39 +205,39 @@ public class Main {
         System.out.println();
 
         for (int i = 0; i < repetitions; i++) {
-            double mutationRate = 0.001 + (i * 0.001);
+            Double mutationRate = 0.001 + (i * 0.001);
             run(
                     List.of(),
                     new SimpleMutation(mutationRate),
                     new DifferencesBasedCrossover(),
                     selection,
-                    function, testRuns);
+                    function, testRuns, 1e-10);
         }
 
         System.out.println();
         System.out.println("GRADIENT CROSSOVER");
         System.out.println();
         for (int i = 0; i < repetitions; i++) {
-            double mutationRate = 0.001 + (i * 0.001);
+            Double mutationRate = 0.001 + (i * 0.001);
             run(
                     List.of(),
                     new SimpleMutation(mutationRate),
                     new DifferencesBasedGradientCrossover(),
                     selection,
-                    function, testRuns);
+                    function, testRuns, 1e-10);
         }
 
         System.out.println();
         System.out.println("GRADIENT MUTATION");
         System.out.println();
         for (int i = 0; i < repetitions; i++) {
-            double mutationRate = 0.001 + (i * 0.001);
+            Double mutationRate = 0.001 + (i * 0.001);
             run(
                     List.of(),
                     new GradientSignGuidedMutation(mutationRate),
                     new DifferencesBasedCrossover(),
                     selection,
-                    function, testRuns);
+                    function, testRuns, 1e-10);
         }
 
         System.out.println();
@@ -101,13 +250,13 @@ public class Main {
                     new GradientSignGuidedMutation(mutationRate),
                     new DifferencesBasedGradientCrossover(),
                     selection,
-                    function, testRuns);
+                    function, testRuns, 1e-10);
         }
         System.out.println();
     }
 
     static void run(
-            List<Step> gradientSteps, Mutation mutation, Crossover crossover, Selection selection, Function function, int testRuns) {
+            List<Step> gradientSteps, Mutation mutation, Crossover crossover, Selection selection, Function function, int testRuns, Double precision) {
         double[] percentages = new double[24];
         double minFunValue = Double.POSITIVE_INFINITY;
         List<Integer> numberOfGenerations = new ArrayList();
@@ -124,7 +273,7 @@ public class Main {
                             .function(function)
                             .stopConditions(
                                     List.of(
-                                            new AssumedPrecisionReachedStopCondition(1e-5),
+                                            new AssumedPrecisionReachedStopCondition(precision),
                                             new NumberOfGenerationStopCondition(1000),
                                             new NoImprovementStopCondition(100)))
                             .build();

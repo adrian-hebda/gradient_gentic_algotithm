@@ -5,10 +5,10 @@ import pl.edu.agh.genetic.exceptions.LowerBoundGreaterThanUpperBoundException;
 
 @Getter
 public class Constraint {
-    private final double upperBound;
-    private final double lowerBound;
+    private final Double upperBound;
+    private final Double lowerBound;
 
-    public Constraint(double lowerBound, double upperBound) {
+    public Constraint(Double lowerBound, Double upperBound) {
         validateConstraintValues(lowerBound, upperBound);
         this.upperBound = upperBound;
         this.lowerBound = lowerBound;

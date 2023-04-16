@@ -9,14 +9,14 @@ import static java.lang.Math.pow;
 public class MatyasFunction extends Function implements GradientFunction {
 
     public MatyasFunction() {
-        variablesConstraints = List.of(new Constraint(-10, 10), new Constraint(-10, 10));
+        variablesConstraints = List.of(new Constraint(-10.0, 10.0), new Constraint(-10.0, 10.0));
         numberOfExecutions = 0;
         NUMBER_OF_PARAMETERS = 2;
     }
 
     @Override
-    public double calculate(Double... parameters) {
-        double result;
+    public Double calculate(Double... parameters) {
+        Double result;
         Double x = parameters[0];
         Double y = parameters[1];
         if (x > variablesConstraints.get(0).getUpperBound()
@@ -26,8 +26,7 @@ public class MatyasFunction extends Function implements GradientFunction {
             result = Double.MAX_VALUE;
             return result;
         }
-        double functionValue =
-                (0.26 * (pow(x, 2) + pow(y, 2))) - (0.48 * x * y);
+        Double functionValue = 0.26 * (x*x + y*y) - 0.48 * x * y;
         numberOfExecutions++;
 
         result = preventNotDefinedValues(functionValue);
@@ -41,16 +40,16 @@ public class MatyasFunction extends Function implements GradientFunction {
 
     @Override
     public Double[] calculateGradient(Double... parameters) {
-        double x = parameters[0];
-        double y = parameters[1];
-        double precision = 0.00001;
-        double xSubPrecision = x - precision;
-        double ySubPrecision = y - precision;
-        double xAddPrecision = x + precision;
-        double yAddPrecision = y + precision;
+        Double x = parameters[0];
+        Double y = parameters[1];
+        Double precision = 0.00001;
+        Double xSubPrecision = x - precision;
+        Double ySubPrecision = y - precision;
+        Double xAddPrecision = x + precision;
+        Double yAddPrecision = y + precision;
 
-        double dx = (calculate(xAddPrecision, y) - calculate(xSubPrecision, y)) / xAddPrecision - xSubPrecision;
-        double dy = (calculate(x, yAddPrecision) - calculate(x, ySubPrecision)) / yAddPrecision - ySubPrecision;
+        Double dx = (calculate(xAddPrecision, y) - calculate(xSubPrecision, y)) / xAddPrecision - xSubPrecision;
+        Double dy = (calculate(x, yAddPrecision) - calculate(x, ySubPrecision)) / yAddPrecision - ySubPrecision;
 
         return new Double[]{dx, dy};
     }

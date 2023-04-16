@@ -16,9 +16,9 @@ public class RastriginFunction extends Function {
     }
 
     @Override
-    public double calculate(Double... parameters) {
+    public Double calculate(Double... parameters) {
         validateNumberOfParameters(parameters);
-        double result;
+        Double result;
 
         for (int i = 0; i < parameters.length; i++) {
             if (parameters[i] > variablesConstraints.get(i).getUpperBound()
@@ -28,14 +28,14 @@ public class RastriginFunction extends Function {
             }
         }
 
-        double functionValue = parameters.length * 10.0 + calculateSum(parameters);
+        Double functionValue = parameters.length * 10.0 + calculateSum(parameters);
         numberOfExecutions++;
         result = preventNotDefinedValues(functionValue);
         return result;
     }
 
-    private double calculateSum(Double[] parameters) {
-        double sum = 0;
+    private Double calculateSum(Double[] parameters) {
+        Double sum = 0.0;
         for (var parameter : parameters) {
             sum += pow(parameter, 2) - 10 * cos(2 * Math.PI * parameter);
         }

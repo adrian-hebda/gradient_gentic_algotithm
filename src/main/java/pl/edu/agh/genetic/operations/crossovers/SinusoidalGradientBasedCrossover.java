@@ -32,7 +32,7 @@ public class SinusoidalGradientBasedCrossover implements Crossover {
       int sizeOfPartOfChromosome = parent1.getCodedChromosome().get(i).size();
       BitSet bitSet = new BitSet(sizeOfPartOfChromosome);
       for (int j = 0; j < sizeOfPartOfChromosome; j++) {
-        double random = Math.random();
+        Double random = Math.random();
         boolean bitValue = chooseBitValue(parent1, parent2, i, j, random);
 
         bitSet.set(j, bitValue);
@@ -43,7 +43,7 @@ public class SinusoidalGradientBasedCrossover implements Crossover {
   }
 
   private boolean chooseBitValue(
-      Chromosome parent1, Chromosome parent2, int i, int j, double random) {
+      Chromosome parent1, Chromosome parent2, int i, int j, Double random) {
     Chromosome greaterGradient =
         parent1.getGradient().getLenOfGradVector() > parent2.getGradient().getLenOfGradVector()
             ? parent1
@@ -53,14 +53,10 @@ public class SinusoidalGradientBasedCrossover implements Crossover {
             ? parent2
             : parent1;
 
-    double threshold =
+    Double threshold =
         smallerGradient.getGradient().getLenOfGradVector()
             / (greaterGradient.getGradient().getLenOfGradVector()
                 + smallerGradient.getGradient().getLenOfGradVector());
-
-    if (threshold > 1 || threshold < 0) {
-      System.out.println();
-    }
 
     return random > threshold
         ? smallerGradient.getCodedChromosome().get(i).get(j)

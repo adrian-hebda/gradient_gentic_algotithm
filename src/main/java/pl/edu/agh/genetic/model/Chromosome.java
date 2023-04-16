@@ -1,6 +1,7 @@
 package pl.edu.agh.genetic.model;
 
 import lombok.Data;
+import lombok.Getter;
 import pl.edu.agh.genetic.exceptions.InvalidNumberOfConstraintsException;
 import pl.edu.agh.genetic.model.functions.Function;
 import pl.edu.agh.genetic.model.functions.GradientFunction;
@@ -12,7 +13,7 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.List;
 
-@Data
+@Getter
 public class Chromosome {
     private Double fitness;
     // List of bitsets containing set of 64 bits representing double value.
@@ -61,7 +62,7 @@ public class Chromosome {
     }
 
     private BitSet generateRandomBitset(Constraint constraint) {
-        double randomValue =
+        Double randomValue =
                 RandomUtils.getRandomDoubleInRange(constraint.getLowerBound(), constraint.getUpperBound());
         return BitSetUtils.toFixedSizeBitset(randomValue);
     }
@@ -87,7 +88,7 @@ public class Chromosome {
                 + '}';
     }
 
-    public void moveByGradient(GradientFunction function, double rate) {
+    public void moveByGradient(GradientFunction function, Double rate) {
         Double[] functionArguments = convertBitsToDoubles();
         if (gradient == null) {
             gradient = new GradientData(function, functionArguments);

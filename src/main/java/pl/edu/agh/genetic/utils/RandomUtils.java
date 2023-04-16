@@ -9,7 +9,7 @@ import java.util.Random;
 public class RandomUtils {
   public static final Random RANDOM = new Random();
 
-  public static double getRandomDoubleInRange(double fromInclusive, double toInclusive) {
+  public static Double getRandomDoubleInRange(Double fromInclusive, Double toInclusive) {
     return fromInclusive + (toInclusive - fromInclusive) * RANDOM.nextDouble();
   }
 

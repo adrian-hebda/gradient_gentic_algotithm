@@ -8,9 +8,9 @@ import java.util.BitSet;
 import java.util.List;
 
 public class GradientSignGuidedMutation implements Mutation {
-  private final double fixedMutationRate;
+  private final Double fixedMutationRate;
 
-  public GradientSignGuidedMutation(double fixedMutationRate) {
+  public GradientSignGuidedMutation(Double fixedMutationRate) {
     this.fixedMutationRate = fixedMutationRate;
   }
 
@@ -29,7 +29,7 @@ public class GradientSignGuidedMutation implements Mutation {
   private void flipMutationConditionFulfilled(BitSet bitSet, Sign gradientSign) {
 
     for (int i = 0; i < bitSet.size(); i++) {
-      double mutationRate = fixedMutationRate;
+      Double mutationRate = fixedMutationRate;
 
       boolean geneSet = bitSet.get(i);
       if ((geneSet && Sign.PLUS.equals(gradientSign))
@@ -40,7 +40,7 @@ public class GradientSignGuidedMutation implements Mutation {
         mutationRate = mutationRate * 0.7;
       }
 
-      double random = Math.random();
+      Double random = Math.random();
       if (random < mutationRate) {
         flip(bitSet, i);
       }

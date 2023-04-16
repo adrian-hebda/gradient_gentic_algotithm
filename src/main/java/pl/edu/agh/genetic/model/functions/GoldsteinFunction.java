@@ -9,14 +9,14 @@ import static java.lang.Math.pow;
 public class GoldsteinFunction extends Function implements GradientFunction {
 
     public GoldsteinFunction() {
-        variablesConstraints = List.of(new Constraint(-2, 2), new Constraint(-2, 2));
+        variablesConstraints = List.of(new Constraint(-2.0, 2.0), new Constraint(-2.0, 2.0));
         numberOfExecutions = 0;
         NUMBER_OF_PARAMETERS = 2;
     }
 
     @Override
-    public double calculate(Double... parameters) {
-        double result;
+    public Double calculate(Double... parameters) {
+        Double result;
         Double x = parameters[0];
         Double y = parameters[1];
         if (x > variablesConstraints.get(0).getUpperBound()
@@ -26,15 +26,15 @@ public class GoldsteinFunction extends Function implements GradientFunction {
             result = Double.MAX_VALUE;
             return result;
         }
-        double a =
+        Double a =
                 1
                         + (pow((x + y + 1), 2)
                         * (19 - (14 * x) + (3 * pow(x, 2)) - (14 * y) + (6 * x * y) + (3 * pow(y, 2))));
-        double b =
+        Double b =
                 30
                         + (pow(((2 * x) - (3 * y)), 2)
                         * (18 - (32 * x) + (12 * pow(x, 2)) + (48 * y) - (36 * x * y) + (27 * pow(y, 2))));
-        double functionValue = a * b;
+        Double functionValue = a * b;
 
         numberOfExecutions++;
 
@@ -49,17 +49,17 @@ public class GoldsteinFunction extends Function implements GradientFunction {
 
     @Override
     public Double[] calculateGradient(Double... parameters) {
-        double x = parameters[0];
-        double y = parameters[1];
-        double precision = 0.00001;
-        double xSubPrecision = x - precision;
-        double ySubPrecision = y - precision;
-        double xAddPrecision = x + precision;
-        double yAddPrecision = y + precision;
+        Double x = parameters[0];
+        Double y = parameters[1];
+        Double precision = 0.00001;
+        Double xSubPrecision = x - precision;
+        Double ySubPrecision = y - precision;
+        Double xAddPrecision = x + precision;
+        Double yAddPrecision = y + precision;
 
-        double dx =
+        Double dx =
                 (calculate(xAddPrecision, y) - calculate(xSubPrecision, y)) / xAddPrecision - xSubPrecision;
-        double dy =
+        Double dy =
                 (calculate(x, yAddPrecision) - calculate(x, ySubPrecision)) / yAddPrecision - ySubPrecision;
 
         return new Double[]{dx, dy};

@@ -25,7 +25,7 @@ public class BitSetUtils {
 
     public static Double toDouble(BitSet bitSet){
     if (bitSet.isEmpty()){
-        return 0.0;
+        return +0.0;
     }
     return Double.longBitsToDouble(bitSet.toLongArray()[0]);
     }

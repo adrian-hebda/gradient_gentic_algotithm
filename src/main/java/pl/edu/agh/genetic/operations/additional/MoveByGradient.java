@@ -6,9 +6,9 @@ import pl.edu.agh.genetic.operations.Step;
 
 public class MoveByGradient implements Step {
 
-  private double rate = 0.01;
+  private Double rate = 0.01;
 
-  public MoveByGradient(double rate) {
+  public MoveByGradient(Double rate) {
     this.rate = rate;
   }
 

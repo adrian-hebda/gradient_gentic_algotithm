@@ -8,7 +8,7 @@ import java.util.BitSet;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DifferencesBasedCrossover implements Crossover {
+public class DifferencesBasedCrossover implements IMultiPointCrossover {
 
   @Override
   public List<Chromosome> performCrossover(List<Chromosome> parents) {

@@ -28,7 +28,7 @@ public class SinusoidalCrossover implements Crossover {
       int sizeOfPartOfChromosome = parent1.getCodedChromosome().get(i).size();
       BitSet bitSet = new BitSet(sizeOfPartOfChromosome);
       for (int j = 0; j < sizeOfPartOfChromosome; j++) {
-        double random = Math.random();
+        Double random = Math.random();
         boolean bitValue =
             random > 0.5
                 ? parent1.getCodedChromosome().get(i).get(j)

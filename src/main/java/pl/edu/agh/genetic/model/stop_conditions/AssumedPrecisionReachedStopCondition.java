@@ -6,7 +6,7 @@ import pl.edu.agh.genetic.model.AlgorithmMetadata;
 @AllArgsConstructor
 public class AssumedPrecisionReachedStopCondition implements StopCondition {
 
-    private final double precision;
+    private final Double precision;
 
     @Override
     public boolean isStopConditionMet(AlgorithmMetadata algorithm) {

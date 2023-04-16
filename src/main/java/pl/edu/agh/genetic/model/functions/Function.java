@@ -11,7 +11,7 @@ public abstract class Function {
     protected int numberOfExecutions = -1;
     protected List<Constraint> variablesConstraints = new ArrayList<>();
 
-    public abstract double calculate(Double... parameters);
+    public abstract Double calculate(Double... parameters);
 
     public List<Constraint> getVariablesConstraints() {
         return variablesConstraints;
@@ -27,7 +27,7 @@ public abstract class Function {
 
     public abstract Double getFitness(Double result);
 
-    double preventNotDefinedValues(double result) {
+    Double preventNotDefinedValues(Double result) {
         if (Double.POSITIVE_INFINITY == result) {
             return Double.MAX_VALUE;
         } else if (Double.NEGATIVE_INFINITY == result) {

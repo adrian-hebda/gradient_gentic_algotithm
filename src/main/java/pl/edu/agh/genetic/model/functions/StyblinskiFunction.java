@@ -12,18 +12,18 @@ public class StyblinskiFunction extends Function implements GradientFunction {
     public StyblinskiFunction() {
         variablesConstraints =
                 List.of(
-                        new Constraint(-5, 5),
-                        new Constraint(-5, 5),
-                        new Constraint(-5, 5),
-                        new Constraint(-5, 5));
+                        new Constraint(-5.0, 5.0),
+                        new Constraint(-5.0, 5.0),
+                        new Constraint(-5.0, 5.0),
+                        new Constraint(-5.0, 5.0));
         numberOfExecutions = 0;
         NUMBER_OF_PARAMETERS = 4;
     }
 
     @Override
-    public double calculate(Double... parameters) {
+    public Double calculate(Double... parameters) {
         validateNumberOfParameters(parameters);
-        double result;
+        Double result;
 
         for (int i = 0; i < parameters.length; i++) {
             if (parameters[i] > variablesConstraints.get(i).getUpperBound()
@@ -33,12 +33,12 @@ public class StyblinskiFunction extends Function implements GradientFunction {
             }
         }
 
-        double x = parameters[0];
-        double y = parameters[1];
-        double z = parameters[2];
-        double q = parameters[3];
+        Double x = parameters[0];
+        Double y = parameters[1];
+        Double z = parameters[2];
+        Double q = parameters[3];
 
-        double functionValue =
+        Double functionValue =
                 ((pow(x, 4) - (16 * pow(x, 2)) + (5 * x))
                         + (pow(y, 4) - (16 * pow(y, 2)) + (5 * y))
                         + (pow(z, 4) - (16 * pow(z, 2)) + (5 * z))
@@ -51,14 +51,14 @@ public class StyblinskiFunction extends Function implements GradientFunction {
 
     @Override
     public Double[] calculateGradient(Double... parameters) {
-        double x = parameters[0];
-        double y = parameters[1];
-        double z = parameters[2];
-        double q = parameters[3];
-        double dx = preventNotDefinedValues((5.0 / 2.0) - (16 * x) + 2 * pow(x, 3));
-        double dy = preventNotDefinedValues((5.0 / 2.0) - (16 * y) + 2 * pow(y, 3));
-        double dz = preventNotDefinedValues((5.0 / 2.0) - (16 * z) + 2 * pow(z, 3));
-        double dq = preventNotDefinedValues((5.0 / 2.0) - (16 * q) + 2 * pow(q, 3));
+        Double x = parameters[0];
+        Double y = parameters[1];
+        Double z = parameters[2];
+        Double q = parameters[3];
+        Double dx = preventNotDefinedValues((5.0 / 2.0) - (16 * x) + 2 * pow(x, 3));
+        Double dy = preventNotDefinedValues((5.0 / 2.0) - (16 * y) + 2 * pow(y, 3));
+        Double dz = preventNotDefinedValues((5.0 / 2.0) - (16 * z) + 2 * pow(z, 3));
+        Double dq = preventNotDefinedValues((5.0 / 2.0) - (16 * q) + 2 * pow(q, 3));
         return new Double[]{dx, dy, dz, dq};
     }
 

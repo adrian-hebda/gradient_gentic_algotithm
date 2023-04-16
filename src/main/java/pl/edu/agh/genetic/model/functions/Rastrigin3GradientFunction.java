@@ -16,9 +16,9 @@ public class Rastrigin3GradientFunction extends Function implements GradientFunc
     }
 
     @Override
-    public double calculate(Double... parameters) {
+    public Double calculate(Double... parameters) {
         validateNumberOfParameters(parameters);
-        double result;
+        Double result;
 
         for (int i = 0; i < parameters.length; i++) {
             if (parameters[i] > variablesConstraints.get(i).getUpperBound()
@@ -27,11 +27,11 @@ public class Rastrigin3GradientFunction extends Function implements GradientFunc
                 return result;
             }
         }
-        double x = parameters[0];
-        double y = parameters[1];
-        double z = parameters[2];
+        Double x = parameters[0];
+        Double y = parameters[1];
+        Double z = parameters[2];
 
-        double functionValue =
+        Double functionValue =
                 30
                         + pow(x, 2)
                         - 10 * cos(2 * PI * x)
@@ -46,12 +46,12 @@ public class Rastrigin3GradientFunction extends Function implements GradientFunc
 
     @Override
     public Double[] calculateGradient(Double... parameters) {
-        double x = parameters[0];
-        double y = parameters[1];
-        double z = parameters[2];
-        double dx = 2 * (x + 10 * PI * sin(2 * PI * x));
-        double dy = 2 * (y + 10 * PI * sin(2 * PI * y));
-        double dz = 2 * (z + 10 * sin(2 * PI * z));
+        Double x = parameters[0];
+        Double y = parameters[1];
+        Double z = parameters[2];
+        Double dx = 2 * (x + 10 * PI * sin(2 * PI * x));
+        Double dy = 2 * (y + 10 * PI * sin(2 * PI * y));
+        Double dz = 2 * (z + 10 * sin(2 * PI * z));
         return new Double[]{dx, dy, dz};
     }
 
